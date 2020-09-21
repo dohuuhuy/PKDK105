@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="Phòng khám Đa Khoa 105 - Nơi chăm sóc bệnh nhân uy tín tại Sài Gòn" />
+	<title>Phòng khám Đa Khoa 105 - Nơi chăm sóc bệnh nhân uy tín tại Sài Gòn</title>
+	<link rel="shortcut icon" type="image/x-icon" href="../new/images/logo.jpg">
+	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="new/styles/menu.css">
+	<link rel="stylesheet" type="text/css" href="new/styles/bootstrap4/bootstrap.min.css">
+	<link href="new/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--CSS Slide-->
+	<link rel="stylesheet" type="text/css" href="new/plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+	<link rel="stylesheet" type="text/css" href="new/plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+	<link rel="stylesheet" type="text/css" href="new/plugins/OwlCarousel2-2.2.1/animate.css">
+	<!--CSS Custom-->
+	<link rel="stylesheet" type="text/css" href="new/styles/main_styles.css">
+	<link rel="stylesheet" type="text/css" href="new/styles/responsive.css">
+	<link rel="stylesheet" type="text/css" href="new/css/custom.css">
+	<link rel="stylesheet" type="text/css" href="new/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="new/slide/import.css">
+	<!--CSS Banner-->
+	<link rel="stylesheet" type="text/css" href="new/slide/import.css">
+	<link rel="stylesheet" type="text/css" href="new/slide/style.css">
+	<link rel="stylesheet" type="text/css" href="new/slide/responsive.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			$("#tc").addClass("active");
+		})
+	</script>
+	<script>
+		$(document).ready(function () {
+			$("#showvideo").html($("#video").val());
+			$("#shownoidunggt").html($("#noidunggt").val());
+
+		});
+	</script>
+
+</head>
+<body style="background: #f7f7f7;">
+
+	<div class="super_container">
+		<!-- Menu -->
+		<!-- Home -->
+		<!-- Home Slider -->
+		<div class="wrapper bg-white fix">
+			<!-- Home Slider -->
+			<div class="slider-area-1 top-header-space-1  pb-10" id="slider-area-1">
+				<div id="mainSlider-1" class="nivoSlider slider-image">
+					<% if(banner!=""){%>
+					<%for(var i=0; i< banner.length; i++){%>
+					<a href="#">
+						<img src="hinhanh/baiviet/<%=banner[i]['tenhinh']%>" alt="main slider" />
+					</a>
+					<%}} %>
+				</div>
+			</div>
+		</div>
+		<!-- Header -->
+		<% include element/header_user.ejs %>
+		<!-- Info Boxes -->
+		<div id="time-table" class="time-table-section">
+			<div class="container">
+				<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+					<div class="row">
+						<div class="service-time one" style="background:#2895f1;"> <span class="info-icon"><i
+									class="fa fa-ambulance" aria-hidden="true"></i></span>
+							<h3>Trường hợp khẩn cấp</h3>
+							<p>Hãy liên hệ ngay với chúng tôi để được hướng dẫn, tránh những trường hợp xấu nhất.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+					<div class="row">
+						<div class="service-time middle" style="background:#0071d1;"> <span class="info-icon"><i
+									class="fa fa-clock-o" aria-hidden="true"></i></span>
+							<h3>Thời gian làm việc</h3>
+							<div class="time-table-section">
+								<ul>
+									<li><span class="left">Sáng</span><span class="right">7h00 - 11h00</span>
+									</li>
+									<li><span class="left">Chiều</span><span class="right">13h30 – 20h30</span></li>
+									<li><span class="left">Cấp cứu</span><span class="right">24/24</span></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+					<div class="row">
+						<div class="service-time three" style="background:#0060b1;"> <span class="info-icon"><i
+									class="fa fa-hospital-o" aria-hidden="true"></i></span>
+							<h3>Phương châm</h3>
+							<p> Với phương châm hoạt động "Luôn đáp ứng nhu cầu khám chữa bệnh chất lượng cao và tiết
+								kiệm thời gian, chi phí tối thiểu cho khách hàng".</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--GIOITHIEU-->
+		<div class="section wow fadeIn">
+			<div class="container infoTag">
+				<div class="heading"> <span class="icon-logo"><img src="images/icon-logo.png" alt="#"></span>
+					<h1 class="td">Giới thiệu</h1>
+					<div class="row" style="padding: 50px 20px; display: block;">
+						<input type="hidden" id="video" value="<%=avt[0]['video']%> ">
+						<div class="row">
+							<div class="col-lg-5">
+								<div class="message-box">
+									<input type="hidden" id="noidunggt" value="<%=avt[0]['noidung']%>">
+									<p style=" text-align: left; width: 100%; height: 200px; overflow: hidden;"
+										id="shownoidunggt"></p>
+									<a href="/gioithieu" data-scroll class="btnCustom" style="width: 160px;">Xem
+										thêm</a>
+								</div>
+							</div>
+							<div class="col-lg-7">
+								<div id="showvideo" style=" box-shadow: 0 1px 15px 1px rgba(81,77,92,.08);"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr class="hr1">
+		</div>
+		<!-- end container -->
+	</div>
+	<!-- Services -->
+	<div class="services">
+		<div class="container">
+			<div class="row">
+				<div class="col text-center">
+					<h1 class="td">Dịch vụ của chúng tôi</h1>
+					<div class="section_subtitle"> chuyên viên lành nghề giàu kinh nghiệm, tận tâm và chu đáo, dịch vụ
+						chất lượng cao </div>
+				</div>
+			</div>
+			<div class="row icon_boxes_row">
+				<!-- Icon Box -->
+				<% if(dichvu!="")
+				{%>
+					<input type="hidden" value="<%=dichvu.length%>" id="getid">
+					<%for(var i =0 ; i< dichvu.length; i++)
+					{%>
+				<div class="col-xl-4 col-lg-6">
+					<div class="icon_box">
+						<div class="icon_box_title_container d-flex flex-row align-items-center justify-content-start">
+							<div class="icon_box_icon"><img src="new/images/icon_5.svg" alt=""></div>
+							<div class="icon_box_title"><%=dichvu[i]['tendichvu']%></div>
+						</div>
+						
+						<input type="hidden" value="<%=dichvu[i]['motadichvu']%>" id="motaan<%=i%>">
+						<div class="icon_box_text" id="motahien<%=i%>"></div>
+					</div>
+				</div>
+				<%	}
+				}%>
+			</div>
+		</div>
+	</div>
+	<!-- Departments -->
+	<div class="departments">
+		<div class="container">
+			<div class="row">
+				<div class="col text-center">
+					<div class="section_title">Trang thiết bị</div>
+					<div class="section_subtitle">Hiện đại</div>
+				</div>
+			</div>
+
+			<div class="row dept_row">
+
+				<div class="col">
+
+					<div class="dept_slider_container_outer">
+
+						<div class="dept_slider_container">
+							<!-- Slider -->
+							<div class="owl-carousel owl-theme dept_slider">
+
+								<!-- Slide -->
+								<% if (trangthietbi!=""){%>
+								<%for(var i =0 ;i < trangthietbi.length; i++){%>
+								<div class="owl-item dept_item">
+									<div class="dept_image"><img src="hinhanh/baiviet/<%=trangthietbi[i]['tenhinh']%>"
+											alt=""></div>
+									<div class="dept_content">
+										<div class="dept_link"><a href="/trangthietbi">Xem chi tiết</a></div>
+									</div>
+								</div>
+								<%}}%>
+
+
+							</div>
+						</div>
+						<!-- Dept Slider Nav -->
+						<div class="dept_slider_nav"><i class="fa fa-chevron-right" aria-hidden="true"></i></div>
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+	<!-- FAQ & News -->
+	<div class="stuff">
+		<div class="container">
+			<div class="row">
+				<!-- FAQ -->
+				<div class="col-lg-7">
+					<div class="faq">
+						<div class="faq_title">Giải đáp thắc mắc</div>
+						<div class="faq_subtitle"></div>
+						<div class="elements_accordions">
+							<div class="accordions">
+								<div class="accordion_container">
+									<div class="accordion d-flex flex-row align-items-center active">
+										<div>Tôi cần phải đặt số thứ tự trước khi khám bệnh không</div>
+									</div>
+									<div class="accordion_panel">
+										<div>
+											<p>Bạn có đặt trước hoặc đến phòng khám đều được</p>
+										</div>
+									</div>
+								</div>
+								<div class="accordion_container">
+									<div class="accordion d-flex flex-row align-items-center">
+										<div>Các hình thức đặt số thứ tự </div>
+									</div>
+									<div class="accordion_panel">
+										<div>
+											<p>Bạn có thể gọi điện thoại trực tiếp hoặc chat qua hệ thống web site/
+												Fanpage của chúng tôi </p>
+										</div>
+									</div>
+								</div>
+								<div class="accordion_container">
+									<div class="accordion d-flex flex-row align-items-center">
+										<div>Mức phí dịch vụ như thế nào?</div>
+									</div>
+									<div class="accordion_panel">
+										<div>
+											<p>Tùy theo dịch vụ, và tình trạng bệnh sẽ có những chi phí khác nhau</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Latest News -->
+				<div class="col-lg-5">
+					<div class="news">
+						<div class="news_title">Tin tức mới</div>
+						<div class="news_subtitle">Những tin tức mới và nổi bật của phòng khám</div>
+						<div class="news_container">
+							<!-- Latest News Post -->
+							<% if(tintuc!=""){%>
+							<%for(var i =0; i< tintuc.length; i++){%>
+							<% var d = new Date(tintuc[i]['ngaydang']); %>
+							<% d = new Date(d.getTime() - 3000000); %>
+							<% var date_format_str = d.getFullYear().toString()+"-"+((d.getMonth()+1).toString().length==2?(d.getMonth()+1).toString():"0"+(d.getMonth()+1).toString())+"-"+(d.getDate().toString().length==2?d.getDate().toString():"0"+d.getDate().toString())+" "+(d.getHours().toString().length==2?d.getHours().toString():"0"+d.getHours().toString())+":"+((parseInt(d.getMinutes()/5)*5).toString().length==2?(parseInt(d.getMinutes()/5)*5).toString():"0"+(parseInt(d.getMinutes()/5)*5).toString())+":00"; %>
+							<div class="latest d-flex flex-row align-items-start justify-content-start">
+								<div>
+									<div class="latest_image"><img src="hinhanh/baiviet/<%=tintuc[i]['hinhanh']%>"
+											alt=""></div>
+								</div>
+								<div class="latest_content">
+									<div class="latest_title"><a
+											href="/noidung/<%=tintuc[i]['tintuc_id']%>"><%=tintuc[i]['tieude']%></a>
+									</div>
+									<div class="latest_info">
+										<ul class="d-flex flex-row align-items-start justify-content-start">
+											<li><a
+													href="/noidung/<%=tintuc[i]['tintuc_id']%>"><%=tintuc[i]['nguoidang']%></a>
+											</li>
+											<li><a href="/noidung/<%=tintuc[i]['tintuc_id']%>"><%=date_format_str%></a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<%}}%>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Footer -->
+	</div> <%include element/footer.ejs%>
+	<script src="new/styles/bootstrap4/popper.js"></script>
+	<script src="new/styles/bootstrap4/bootstrap.min.js"></script>
+	<script src="new/plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+	<script src="new/plugins/easing/easing.js"></script>
+	<script src="new/plugins/parallax-js-master/parallax.min.js"></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js'></script>
+	<script src="new/js/custom.js"></script>
+	<script src="new/js/animate.js"></script>
+	<!--Slide-->
+	<script src="new/slide/plugins.js"></script>
+	<script src="new/slide/main.js"></script>
+	<!-- Load Facebook SDK for JavaScript -->
+	<div id="fb-root"></div>
+<!-- Load Facebook SDK for JavaScript -->
+<div id="fb-root"></div>
+<!-- Load Facebook SDK for JavaScript -->
+<div id="fb-root"></div>
+
+	<script>
+			$(document).ready(function () {
+				id=$("#getid").val();
+				for(var i=0;i<id;i++ )
+				{
+					var motaan= '#motaan'+i;
+					var motahien='#motahien'+i
+					$(motahien).html($(motaan).val());
+				}
+			
+			});
+		</script>
+</body>
+
+</html>

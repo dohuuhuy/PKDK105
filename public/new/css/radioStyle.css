@@ -1,0 +1,59 @@
+
+/* RADIO BUTTON STLYING BEGINS */
+.myradio {
+  display: inline-block;
+  border-radius: 999px;
+  margin: 5px;
+}
+.myradio__input {
+  opacity: 0;
+  position: absolute;
+}
+.myradio__label {
+  border-radius: 9999px;
+  padding: 9px 15px 9px 40px;
+  cursor: pointer;
+  position: relative;
+  transition: all .5s;
+}
+.myradio__label::before, .myradio__label::after {
+  content: "";
+  border-radius: 9999px;
+  width: 16px;
+  height: 16px;
+  margin: 3px 0;
+  position: absolute;
+  z-index: 1;
+}
+.myradio__label::before {
+  background-color: #DCDCDC;
+  border: 9px solid #000;
+  top: 5px;
+  left: 11px;
+  transition: all .5s;
+}
+.myradio__label::after {
+  background-color: #ffffff;
+  top: 6px;
+  left: 12px;
+  transition: all .15s;
+  transition-timing-function: ease-out;
+}
+.myradio__label:hover {
+  background-color: rgba(114, 86, 248, 0.1);
+}
+.myradio__label:hover::before {
+  border: 9px solid #7256F8;
+}
+.myradio__input:checked ~ .myradio__label::before {
+  background-color: #7256F8;
+  border: 2px solid #7256F8;
+}
+.myradio__input:checked ~ .myradio__label::after {
+  width: 8px;
+  height: 8px;    
+  top: 9px;
+  left: 15px
+}
+
+/* RADIO BUTTON STLYING ENDS */

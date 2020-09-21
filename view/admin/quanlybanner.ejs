@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>SB Admin 2 - Dashboard</title>
+    <!-- Custom styles for this template-->
+    <link rel='stylesheet' href='https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.css'>
+    <link href="../../new/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../../new/admin/css/sb-admin-2.min.css">
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../newstyle.css">
+    <link rel="stylesheet" href="../../new/css/custom2.css">
+    <link rel="stylesheet" href="../../new/css/styleBtn.css">
+    <link rel="stylesheet" href="../../new/css/inputStyle.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="../../socket.io/socket.io.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#menuBanner").addClass("active");
+            $("#formADD").hide();
+            $("#them").click(function () {
+                $("#formADD").show();
+            })
+            $("#btnCancelAdd").click(function () {
+                $("#formADD").hide();
+            })
+        })
+    </script>
+    <script>
+        //THONG BAO
+        jQuery(document).ready(function ($) {
+            //open popup
+
+            //close popup
+            $('.cd-popup').on('click', function (event) {
+                if ($(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup')) {
+                    event.preventDefault();
+                    $(this).removeClass('is-visible');
+                }
+            });
+            //close popup when clicking the esc keyboard button
+            $(document).keyup(function (event) {
+                if (event.which == '27') {
+                    $('.cd-popup').removeClass('is-visible');
+                }
+            });
+        });
+    </script>
+</head>
+
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper"> <% include ../element/header_admin.ejs %>
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content" style="flex: 0">
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <span style="text-align: center; color:#007EA7; font-weight: bold ; font-size: 20px;">QUẢN LÝ KHOA</span>
+                </nav>
+            </div>
+            <div class="container-fuild">
+                <div class="col-12"><input type="button" id="them" class="btn btn--contained-success ripple" ripple="ripple" value="Thêm banner"></div>
+                <div class="col-12" id="formADD">
+                    <div class="customTable">
+                        <form method="POST" action="/thembanner" id="thembanner" enctype="multipart/form-data">
+                            <input id="banner" type="file" name="banner" /><br>
+                            <div style="margin-top: 10px;">
+                                <input class="btn btn--contained-link ripple" onclick="luubanner();" ripple="ripple" type="button" value="Lưu" style="float: none;">
+                                <a href="#" id="btnCancelAdd" class="btn btn--contained-bluer ripple" ripple="ripple">Hủy</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="customTable">
+                        <table class="table table-image" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">STT</th>
+                                    <th scope="col">Hình ảnh</th>
+                                    <th scope="col">Xóa</th>
+                                </tr>
+                            </thead>
+                            <tbody> <% if (banner!=""){%> <% for(var i=0; i< banner.length; i++){ %> <tr class="box-object">
+                                    <td class="stt"><%=i+1%></td>
+                                    <td class="image"><img src="../../hinhanh/baiviet/<%=banner[i]['tenhinh']%>"></td>
+                                    <form action="/xoabanner/<%=banner[i]['banner_id']%>" method="POST">
+                                        <td><input type="submit" class="btnDelete" value="Xóa"></td>
+                                    </form>
+                                </tr> <%}}%> </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- popup alert-->
+    <div class="cd-popup" role="alert">
+        <div class="cd-popup-container">
+            <p id="thongbao" style="color:red;"></p>
+            <!--<ul class="cd-buttons">
+              <li><a href="#0">Yes</a></li>
+              <li><a href="#0">No</a></li>
+            </ul> -->
+            <a href="#0" class="cd-popup-close img-replace">Close</a>
+        </div> <!-- cd-popup-container -->
+    </div> <!-- cd-popup -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+    <!-- Bootstrap core JavaScript-->
+    <script src="../../new/admin/vendor/jquery/jquery.min.js"></script>
+    <script src="../../new/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../new/admin/js/sb-admin-2.min.js"></script>
+    <script src="../../handel/check.js"></script>
+    <script src="../../new/js/scriptBtn.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script>
+        $('#otherCheckbox').on('click', function () {
+            var cb = $('#otherCheckbox').is(':checked');
+            $('#other').prop('disabled', !cb);
+        });
+    </script>
+</body>
+
+</html>

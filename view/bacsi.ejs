@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../new/styles/menu.css">
+    <link rel="stylesheet" type="text/css" href="../new/styles/bootstrap4/bootstrap.min.css">
+    <link rel="stylesheet" href="../new/css/custom.css">
+    <link rel="stylesheet" type="text/css" href="../new/styles/about.css">
+    <link href="../new/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="../new/styles/main_styles.css">
+    <link rel="stylesheet" href="../new/css/bootstrap.min.css">
+    <script src="socket.io/socket.io.js"></script>
+    <script>
+            $(document).ready(function()
+            {
+                    $("#vct").addClass("active");
+            })
+            </script>
+    <script>
+        var socket = io("http://18.212.196.9:8080");
+        $(document).ready(function () {
+            socket.emit("laylength");
+
+        });
+        socket.on("hanhan", function (data) {
+
+            for (var i = 0; i < data; i++) {
+                var abc = '#abc' + i;
+                var showmota = '#showmota' + i;
+                var motaan = "#motaan" + i;
+                $(showmota).html($(motaan).val());
+
+            }
+
+        })
+        $(document).ready(function () {
+
+            var input = document.querySelector('#chuyenkhoa');
+            var items = document.querySelector('#list').getElementsByTagName('li');
+            input.addEventListener('change', function (ev) {
+             if($("#chuyenkhoa :selected").val()==1)
+             {
+                for (var i = 0; i < items.length; i++) {
+                    var a = "abc" + i;
+
+                        var abc = document.getElementById(a);
+
+                        abc.classList.remove("hidden");
+                }
+             }
+             else
+             {
+                var text = ev.target.value;
+                var pat = new RegExp(text, 'i');
+                for (var i = 0; i < items.length; i++) {
+
+                    var item = items[i];
+                    if (pat.test(item.innerText)) {
+
+                        var a = "abc" + i;
+
+                        var abc = document.getElementById(a);
+
+                        abc.classList.remove("hidden");
+                    }
+                    else {
+                        var a = "abc" + i;
+                        var abc = document.getElementById(a);
+                        abc.className = abc.className + ' hidden';
+                    }
+                }
+             }
+            });
+        })
+    </script>
+</head>
+
+<body> <% include element/header_user.ejs %>
+    <div id="demo" class="collapse show">
+        <div class="site-section">
+            <div class="container">
+                <div class="doctors" style="margin-top: 80px">
+                    <select id="chuyenkhoa" class="customCombobox">
+                        <option value="1">Tất cả</option>
+                        <% if(chuyenkhoa!="")
+                            {
+                                for(var i=0; i< chuyenkhoa.length; i++)
+                                {
+                                    %> <option value="<%=chuyenkhoa[i]['tenchuyenkhoa']%>">
+                            <%=chuyenkhoa[i]['tenchuyenkhoa']%></option> <%
+                                }
+                            } %>
+                    </select>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col text-center">
+                                <div class="section_title">Đội ngũ bác sĩ </div>
+                                <div class="section_subtitle">Giàu kinh nghiệm</div>
+                            </div>
+                        </div>
+                        <div id="list" class="row doctors_row">
+                            <% for(var i =0; i< bacsi.length; i++){ %>
+                            <!-- Doctor -->
+                            <div id="abc<%=i%>" class="col-xl-3 col-md-6 " id="abc<%=i%>" data-toggle="modal"
+                                data-target="#myModal<%=i%>">
+                                <div class="doctor">
+                                    <div class="doctor_image"><img src="../hinhanh/baiviet/<%= bacsi[i]['hinhanh']%>"
+                                            alt=""></div>
+                                    <div class="doctor_content">
+                                        <div class=""><a href="#"><%= bacsi[i]['tenbacsi']%></a></div>
+                                        <div class="doctor_title"><%= bacsi[i]['chucvu']%></div>
+                                        <li class="hidden"><%= bacsi[i]['tenchuyenkhoa']%></li>
+                                        <div class="doctor_link"><a href="#">+</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--MODEL-->
+                            <div class="modal fade modalCustom" id="myModal<%=i%>" role="dialog">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="row modal-header">
+                                            <button type="button" class="close buttonClose" data-dismiss="modal"
+                                                style="margin-top: -16px;margin-right: -1px;">&times;</button>
+                                        </div>
+                                        <div class=" row modal-body">
+                                            <div class="col-md-12">
+                                                <h2 class="titleModal">Thông tin bác sĩ</h2>
+                                            </div>
+                                            <div class="row" style="padding-top: 30px;">
+                                                <div class="col-md-6">
+                                                    <img src="../hinhanh/baiviet/<%= bacsi[i]['hinhanh']%>"
+                                                        style="width: 100%" class="imgCustom mx-auto d-block"
+                                                        alt="img1">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h4><strong><%= bacsi[i]['tenbacsi']%></strong></h4>
+                                                    <h5><span><img src="../images/name.png" width="17px"></span> <i
+                                                            style="color: #32c69a;"><%= bacsi[i]['chucvu']%></i></h5>
+                                                    <h5><span><img src="../images/first-aid-kit.png"
+                                                                width="17px"></span>
+                                                        <strong><%= bacsi[i]['tenchuyenkhoa']%></strong></h5>
+                                                    <input type="hidden" id="motaan<%=i%>"
+                                                        value="<%= bacsi[i]['mota']%>" />
+                                                    <a id="showmota<%=i%>"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <%} %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" align="center" style="display: flex;align-items: center;justify-content: center;">
+                <div class="row text-center pt-5 border-top">
+                    <div class="col-md-12">
+                        <div class="custom-pagination i_active "> <a href="chitietsanpham.php?masp=554&amp;page=1">1</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <%include element/footer.ejs%>
+    <script src="../new/js/custom.js"></script>
+    
+</body>
+
+</html>

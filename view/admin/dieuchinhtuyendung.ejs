@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>SB Admin 2 - Dashboard</title>
+  <!-- Custom styles for this template-->
+  <link href="../../new/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="../../new/admin/css/sb-admin-2.min.css">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../newstyle.css">
+  <link rel="stylesheet" href="../../new/css/custom2.css">
+  <link rel="stylesheet" href="../../new/css/styleBtn.css">
+  <link rel="stylesheet" href="../../new/css/inputStyle.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="../../socket.io/socket.io.js"></script>
+  <script>
+    var socket = io("http://103.81.86.79:8080");
+    // XU LY TUYEN DUNG
+    $(document).ready(function () {
+      $("#menuTD").addClass("active");
+      $("#tuyendung").click(function () {
+        var dieukienvt;
+        var dieukienyc;
+        var dieukienhs;
+        var vt = [];
+        for (var i = 0; i <= a; i++) {
+          var vitri = $("#vitri" + i).val();
+          var sl = $("#soluong" + i).val();
+          if (vitri != "" || sl != "") {
+            var bien = "#soluong" + i;
+            var regex = /^[0-9]+$/;
+            var sl = $(bien).val();
+            if (sl.match(regex)) {
+              dieukienvt = true;
+              break;
+            }
+            else {
+              dieukienvt = false;
+            }
+
+
+          }
+          else {
+
+            dieukienvt = false;
+
+          }
+        }
+        for (var j = 0; j <= b; j++) {
+          var yeucau = $("#yeucau" + j).val();
+          if (yeucau == "") {
+            dieukienyc = false;
+            break;
+          }
+          else {
+            dieukienyc = true;
+          }
+        }
+        for (var y = 0; y <= c; y++) {
+          var hoso = $("#hoso" + y).val();
+          if (hoso == "") {
+            dieukienhs = false;
+            break;
+          }
+          else {
+            dieukienhs = true;
+          }
+        }
+        if (dieukienvt == true && dieukienyc == true && dieukienhs == true) {
+
+          $("#dieuchinh").submit();
+
+        }
+        else {
+          document.getElementById("thongbao").innerHTML = "Mời bạn kiểm tra thông tin";
+          $('.cd-popup').addClass('is-visible');
+
+        }
+      })
+    })
+    {
+      function checkso(bi) {
+
+        var bien = "#soluong" + bi;
+        var regex = /^[0-9]+$/;
+        var sl = $(bien).val();
+        var maloi = "loitd" + bi;
+        if (sl.match(regex)) {
+
+          document.getElementById(maloi).innerHTML = ""
+        }
+        else {
+          document.getElementById(maloi).innerHTML = "Số lượng: Bạn vui lòng nhập kiểu số"
+        }
+      }
+    }
+
+  </script>
+  <script>
+    //THONG BAO
+    jQuery(document).ready(function ($) {
+      //open popup
+
+      //close popup
+      $('.cd-popup').on('click', function (event) {
+        if ($(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup')) {
+          event.preventDefault();
+          $(this).removeClass('is-visible');
+        }
+      });
+      //close popup when clicking the esc keyboard button
+      $(document).keyup(function (event) {
+        if (event.which == '27') {
+          $('.cd-popup').removeClass('is-visible');
+        }
+      });
+    });
+  </script>
+</head>
+
+<body id="page-top">
+  <!-- Page Wrapper -->
+  <div id="wrapper"> <% include ../element/header_admin.ejs %>
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <!-- Main Content -->
+      <div>
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+          <span style=" text-align: center; color:#007EA7; font-weight: bold ; font-size: 24px;">THÊM TUYỂN DỤNG</span>
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+        </nav>
+      </div>
+      <div class="container">
+        <div ng-controller="DemoCtrl as vm" layout="column" ng-cloak="" ng-app="app">
+          <md-content class="box-content">
+            <!--FORM TUYEN DUNG-->
+            <form action="/formdieuchinhtuyendung/<%=id%>" id="dieuchinh" method="POST">
+              <div id="info2">
+                <div id="info3">
+                  <h1 class="content-title-child" style="text-align: center;">VỊ TRÍ</h1>
+                  <div class="add-number">
+                    <p>Thêm vị trí</p>
+                    <span><input id="them" value="+" placeholder="them" type="button" class="plusButton"></span>
+                    <span><input id="xoa" value="-" placeholder="xoa" type="button" class="plusButton"></span>
+                  </div>
+                  <%for( var i=0; i< vitri.length;i++)
+                  {%>
+                  <div id="vt<%=i%>">
+                    <div style="background: #f8f9fc; padding: 10px; margin: 10px 0px; border: 1px solid gray;">
+                      <div class="text-input"><input id="vitri<%=i%>" type="text" name="vitri<%=i%>"
+                          value="<%=vitri[i]['tenvitri']%>" placeholder="Vị trí" autocomplete="off" required
+                          style="background: #f8f9fc;" />
+                        <label for="vitri<%=i%>">Vị trí</label>
+                      </div>
+                      <div class="text-input">
+                        <input id="soluong<%=i%>" type="text" name="soluong<%=i%>" onblur="checkso('<%=i%>');"
+                          placeholder="Số lượng" min="1" value="<%=vitri[i]['soluong']%>" autocomplete="off" required
+                          style="background: #f8f9fc;" />
+                        <label for="soluong<%=i%>">Số lượng</label>
+                      </div>
+                    </div>
+                  </div>
+                  <p id="loitd<%=i%>" style="color: red;"></p>
+                  <%}%>
+                </div>
+                <h1 class="content-title-child" style="text-align: center;">YÊU CẦU</h1>
+                <div class="add-number" style="margin-bottom: 10px;">
+                  <p>Thêm yêu cầu</p>
+                  <span><input id="themyc" value="+" placeholder="them" type="button" class="plusButton"></span>
+                  <span><input id="xoayc" value="-" placeholder="xoayc" type="button" class="plusButton"></span>
+                </div>
+                <div id="info4">
+                    <%for( var i=0; i< yeucau.length;i++)
+                    {%>
+                  <div id="yc<%=i%>">
+                    <div style="background: #f8f9fc; padding: 10px; margin: 10px 0px; border: 1px solid gray;">
+                      <div class="text-input"><input type="text" id="yeucau<%=i%>" name="yeucau<%=i%>"
+                          placeholder="Yêu cầu" autocomplete="off" value="<%=yeucau[i]['tenyeucau']%>" required
+                          style="background: #f8f9fc;" /><label for="yeucau<%=i%>">Yêu cầu</label></div>
+                    </div>
+                  </div>
+                  <%}%>
+                </div>
+                <h1 class="content-title-child" style="text-align: center;">HỒ SƠ DỰ TUYỂN</h1>
+                <div class="add-number" style="margin-bottom: 10px;">
+                  <p>Thêm hồ sơ dự tuyển</p>
+                  <span><input id="themhs" value="+" placeholder="them" type="button" class="plusButton"></span>
+                  <span><input id="xoahs" value="-" placeholder="xoayc" type="button" class="plusButton"></span>
+                </div>
+                <div id="info5">
+                    <%for( var i=0; i< hoso.length;i++)
+                    {%>
+                  <div id="hs<%=i%>">
+                    <div style="background: #f8f9fc; padding: 10px; margin: 10px 0px; border: 1px solid gray;">
+                      <div class="text-input"><input type="text" id="hoso<%=i%>" name="hoso<%=i%>" value="<%=hoso[i]['tenhoso']%>"
+                          placeholder="Hồ sơ" autocomplete="off" required style="background: #f8f9fc;" /><label
+                          for="hoso<%=i%>">Hồ sơ</label></div>
+                    </div>
+                  </div>
+                  <%}%>
+                </div>
+                <input type="hidden" value="<%=vitri.length-1%>" id="diema" name="diema">
+                  <input type="hidden" value="<%=yeucau.length-1%>" id="diemb" name="diemb">
+                  <input type="hidden" value="<%=hoso.length-1%>" id="diemc" name="diemc">
+                  <input type="button" value="CẬP NHẬT TUYỂN DỤNG" id="tuyendung" name="tuyendung" class="customButton"
+                    style="margin-bottom: 20px;">
+                </div>
+            </form>
+
+
+
+          </md-content>
+          <!-- popup alert-->
+          <div class="cd-popup" role="alert">
+            <div class="cd-popup-container">
+              <p id="thongbao" style="color:red;"></p>
+              <!--<ul class="cd-buttons">
+                  <li><a href="#0">Yes</a></li>
+                  <li><a href="#0">No</a></li>
+                </ul> -->
+              <a href="#0" class="cd-popup-close img-replace">Close</a>
+            </div> <!-- cd-popup-container -->
+          </div> <!-- cd-popup -->
+        </div>
+      </div>
+    </div>
+    <!-- End of Content Wrapper -->
+  </div>
+  <!-- End of Page Wrapper -->
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" href="login.html">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Bootstrap core JavaScript-->
+  <script>
+    // Them vi tri tuyen dung
+    var a = $("#diema").val();
+    var b = $("#diemb").val();
+    var c = $("#diemc").val();
+
+    $("#them").click(function () {
+      a++;
+      $("#diema").val(a);
+      $("div#info3").append('<div id="vt' + a + '"><div style="background: #f8f9fc; padding: 10px; margin: 10px 0px; border: 1px solid gray;"><div class="text-input"><input id="vitri' + a + '" type="text" name="vitri' + a + '" placeholder="Vị trí" autocomplete="off" required style="background: #f8f9fc;"/><label for="vitri' + a + '">Vị trí</label></div><div class="text-input"><input id="soluong' + a + '" type="text" name="soluong' + a + '" onblur="checkso(' + a + ');" placeholder="Số lượng" min="1" value="1" autocomplete="off" required style="background: #f8f9fc;"/><label for="soluong' + a + '">Số lượng</label></div></div></div><p id="loitd' + a + '" style="color: red;"></p>');
+    });
+    // Them yeu cau
+    $("#themyc").click(function () {
+      b++;
+      $("#diemb").val(b);
+      $("div#info4").append('<div id="yc' + b + '"><div style="background: #f8f9fc; padding: 10px; margin: 10px 0px; border: 1px solid gray;"><div class="text-input"><input type="text" id="yeucau' + b + '" name="yeucau' + b + '" placeholder="Yêu cầu" autocomplete="off" required style="background: #f8f9fc;"/><label for="yeucau' + b + '">Yêu cầu</label></div></div></div>');
+    });
+    // Them ho so
+    $("#themhs").click(function () {
+      c++;
+      $("#diemc").val(c);
+      $("div#info5").append('<div id="hs' + c + '"><div style="background: #f8f9fc; padding: 10px; margin: 10px 0px; border: 1px solid gray;"><div class="text-input"><input type="text" id="hoso' + c + '" name= "hoso' + c + '" placeholder="Hồ sơ" autocomplete="off" required style="background: #f8f9fc;"/><label for="hoso' + c + '">Hồ sơ</label></div></div></div>');
+    });
+    // xoa vitri
+    $("#xoa").click(function () {
+
+      var vitri = '#vt' + a;
+      if (a > 0) {
+        $("" + vitri + "").remove();
+        a--;
+        $("#diema").val(a);
+      }
+    });
+
+    $("#xoayc").click(function () {
+      var vitri = '#yc' + b;
+      if (b > 0) {
+        $(vitri).remove();
+        b--;
+        $("#diemb").val(b);
+      }
+
+    });
+    $("#xoahs").click(function () {
+      if (c > 0) {
+        var vitri = '#hs' + c;
+        $(vitri).remove();
+        c--;
+        $("#diemc").val(c);
+      }
+    });
+  </script>
+  <script src="../../new/admin/vendor/jquery/jquery.min.js"></script>
+  <script src="../../new/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../../new/admin/js/sb-admin-2.min.js"></script>
+  <script src="../../handel/check.js"></script>
+  <!-- Core plugin JavaScript-->
+</body>
+
+</html>

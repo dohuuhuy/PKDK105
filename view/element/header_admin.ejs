@@ -1,0 +1,117 @@
+<!-- Sidebar -->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" style="margin: 0px;">
+  <!-- Sidebar - Brand -->
+  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/logout">
+    <div class="sidebar-brand-icon">
+      <i class="fas fa-user"></i>
+    </div>
+    <div class="sidebar-brand-text mx-3">Đăng xuất</div>
+  </a>
+  <!-- Divider -->
+  <hr class="sidebar-divider my-0">
+  <!-- Nav Item - Dashboard -->
+  <li class="nav-item">
+    <a class="nav-link" href="/">
+      <i class="fas fa-house-damage"></i>
+      <span>Trang chủ</span></a>
+  </li>
+  <!-- Divider -->
+  <hr class="sidebar-divider">
+  <!-- Heading -->
+  <div class="sidebar-heading" style="margin-bottom: 10px;">Quản lý</div>
+  <!-- Nav Item - Pages Collapse Menu -->
+  <li class="nav-item" id="menutk">
+    <a class="nav-link collapsed" href="/admin/taikhoan">
+      <i class="fas fa-file-alt"></i>
+      <span>Đổi tài khoản</span>
+    </a>
+  </li>
+  <li class="nav-item" id="menuBV">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#accordionBV" aria-expanded="true" aria-controls="accordionBV">
+      <i class="fas fa-file-alt"></i>
+      <span>Quản lý bài viết</span>
+    </a>
+    <div id="accordionBV" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <a class="collapse-item" href="/admin/quanlytintuc/1"><i class="fas fa-stream"></i><span> Danh sách bài viết</span></a>
+        <a class="collapse-item" href="/themtintuc"><i class="fas fa-plus"></i><span> Thêm bài viết</span></a>
+      </div>
+    </div>
+  </li>
+ 
+  <!-- Nav Item - Pages Collapse Menu -->
+  <li class="nav-item" id="menuBS">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#accordionBS" aria-expanded="true" aria-controls="accordionBS">
+      <i class="fas fa-user-md"></i>
+      <span>Quản lý bác sỉ</span>
+    </a>
+    <div id="accordionBS" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <a class="collapse-item" href="/admin/quanlybacsi"><i class="fas fa-stream"></i><span> Danh sách bác sỉ</span></a>
+        <a class="collapse-item" href="/doingubacsi"><i class="fas fa-plus"></i><span> Thêm bác sỉ</span></a>
+      </div>
+    </div>
+  </li>
+  <!-- Nav Item - Pages Collapse Menu -->
+  <li class="nav-item" id="menuKhoa">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#accordionkhoa" aria-expanded="true" aria-controls="accordionkhoa">
+        <i class="fas fa-file-alt"></i>
+        <span>Quản lý khoa</span>
+      </a>
+      <div id="accordionkhoa" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <a class="collapse-item" href="/admin/quanlykhoa"><i class="fas fa-stream"></i><span> Danh sách chuyên khoa</span></a>
+          <a class="collapse-item" href="/gioithieuchuyenkhoa"><i class="fas fa-plus"></i><span> Thêm nội dung khoa</span></a>
+        </div>
+      </div>
+    </li>
+  <!-- Nav Item - Pages Collapse Menu -->
+  <li class="nav-item" id="menuDV">
+    <a class="nav-link" href="/admin/quanlydichvu">
+      <i class="fas fa-capsules"></i>
+      <span>Quản lý dịch vụ</span></a>
+  </li>
+  <!-- Nav Item - Pages Collapse Menu -->
+  <li class="nav-item" id="menuTD">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#accordionTV" aria-expanded="true" aria-controls="accordionTV" style="padding-left: 13px;">
+      <i class="fas fa-bullhorn"></i>
+      <span>Quản lý tuyển dụng</span>
+    </a>
+    <div id="accordionTV" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+          <a class="collapse-item" href="/admin/quanlytuyendung"><i class="fas fa-stream"></i><span> Danh sách tuyển dụng</span></a>
+        <a class="collapse-item" href="/themtuyendung"><i class="fas fa-plus"></i><span> Thêm tuyển dụng</span></a>
+      </div>
+    </div>
+  </li>
+  <!-- Divider -->
+  <hr class="sidebar-divider">
+  <!-- Heading -->
+  <div class="sidebar-heading" style="margin-bottom: 10px;">Tùy chỉnh trang</div>
+  <!-- Nav Item - Pages Collapse Menu -->
+  <li class="nav-item" id="menuBanner">
+    <a class="nav-link" href="/admin/quanlybanner">
+      <i class="fas fa-images"></i>
+      <span>Quản lý banner</span></a>
+  </li>
+  <li class="nav-item" id="menuDCT">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+      <i class="fas fa-fw fa-folder"></i>
+      <span>Điều chỉnh trang</span>
+    </a>
+    <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <a class="collapse-item" href="/gioithieuphongkham">Giới thiệu phòng khám</a>
+        <a class="collapse-item" href="/dieuchinhquytrinh">Quy trình khám bệnh</a>
+        <a class="collapse-item" href="/themtrangthietbi">Thêm trang thiết bị</a>
+      </div>
+    </div>
+  </li>
+  <!-- Divider -->
+  <hr class="sidebar-divider d-none d-md-block">
+  <!-- Sidebar Toggler (Sidebar) -->
+  <div class="text-center d-none d-md-inline">
+    <button class="rounded-circle border-0" id="sidebarToggle"></button>
+  </div>
+</ul>
+<!-- End of Sidebar -->

@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Thêm bài viết </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+  <link rel='stylesheet'
+    href='https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.css'>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="newstyle.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="css/custom.css">
+  <script src="socket.io/socket.io.js"></script>
+  <script>
+    $(window).scroll(function () {
+      var top = 200;
+      if ($(window).scrollTop() >= top) {
+        $("#navbarMain").css("position", "fixed");
+        $("#navbarMain").css("top", "0");
+        $("#navbarMain").css("z-index", "1000");
+      } else {
+        $("#navbarMain").css("position", "");
+        $("#navbarMain").css("top", "");
+        $("#navbarMain").css("z-index", "");
+      }
+    });
+  </script>
+  <script>
+    var socket = io("http://18.212.196.9:8080");
+    $(document).ready(function () {
+      socket.emit("menuchuyenkhoa");
+      socket.on("returnmenu", function (data) {
+        for (var u = 0; u < data.length; u++) {
+          $("#menuck").append('<a href="/chuyenkhoa/' + data[u]['chuyenkhoa_id'] + '"><li  >' + data[u]['tenchuyenkhoa'] + '</li></a>');
+        }
+      })
+    })
+  </script>
+  <script>
+    var socket = io("http://18.212.196.9:8080");
+    function ahinh() {
+      var selector = document.getElementById("themhinh");
+      var video = document.getElementById("showvideo");
+      var img = document.getElementById("showhinh");
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var loai = selector.files[0].type;
+        if (loai == "image/jpeg" || loai == "image/png") {
+          img.src = e.target.result;
+          document.getElementById("loi").innerHTML = ""
+          $("#inser").click(function () {
+            var tenhinh = selector.files[0].name;
+            var tenluu = Date.now() + '-' + tenhinh;
+            socket.emit("themhinhtt", { base64: e.target.result }, tenluu);
+            // var fil = document.getElementById("themhinh").value;
+            //  var filename = fil.replace(/^.*?([^\\\/]*)$/, '$1')
+            var editor = CKEDITOR.instances.content;
+            var link = '../hinhanh/baiviet/';
+            value = '<p><img alt=""  width="70%" height="70%"  class="img-fluid" src="' + link + tenluu + '"/></p>'
+            if (editor.mode == 'wysiwyg') {
+              editor.insertHtml(value);
+            } else {
+              alert('You must be in WYSIWYG mode!');
+            }
+          })
+        }
+        else {
+          document.getElementById("loi").innerHTML = "Bạn vui lòng chọn file ảnh"
+        }
+      }
+      reader.readAsDataURL(selector.files[0]);
+    }
+    // emit bai viet tin tuc
+    function baiviettintuc() {
+      var tieude = document.getElementById("tieude").value;
+      var noidung = document.getElementById("text").value;
+      var avt = document.getElementById("file").value;
+      var tacgia = document.getElementById("tacgia").value;
+      var loaibai = document.getElementById("select").value;
+      var loaitintuc1 = document.getElementById("loaitt1").checked;
+      var loaitintuc2 = document.getElementById("loaitt2").checked;
+      var loaitt1 = document.getElementById("loaitt1").value;
+      var loaitt2 = document.getElementById("loaitt2").value;
+      if (tieude != "" && noidung != "" && avt != "" && tacgia != "" && loaibai != "") {
+        if (loaitintuc1 == true || loaitintuc2 == true) {
+          var loaianh = document.getElementById("file").files[0].type;
+
+          if (loaianh == "image/jpeg" || loaianh == "image/png" || loaianh == "video/mp4") {
+
+            var hinh = document.getElementById("file");
+            var reader = new FileReader();
+            reader.onload = function (e) {
+              var tenhinh = hinh.files[0].name;
+            var tenluu = Date.now() + '-' + tenhinh;
+              socket.emit("themhinhtt", { base64: e.target.result }, tenluu);
+              if (loaitintuc1 == true) {
+                socket.emit("thembaitt", tieude, noidung, tenluu, tacgia, loaibai, loaitt1);
+              }
+              else {
+                socket.emit("thembaitt", tieude, noidung, tenluu, tacgia, loaibai, loaitt2);
+              }
+
+            }
+            reader.readAsDataURL(document.getElementById("file").files[0]);
+          }
+          else {
+            document.getElementById("thongbao").innerHTML = "Mời bạn chọn file ảnh"
+            $('.cd-popup').addClass('is-visible');
+
+          }
+
+
+        }
+        else {
+          document.getElementById("thongbao").innerHTML = "Mời bạn chọn loại tin tức"
+          $('.cd-popup').addClass('is-visible');
+        }
+      }
+      else {
+        document.getElementById("thongbao").innerHTML = "Mời bạn nhập đầy đủ thông tin"
+        $('.cd-popup').addClass('is-visible');
+      }
+
+    }
+    // show anh avt
+    function anhdaidien() {
+      var avt = document.getElementById("file");
+      var showavt = document.getElementById("anhavt");
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        showavt.src = e.target.result;
+      }
+      reader.readAsDataURL(avt.files[0]);
+    }
+    //thong  bao thanh cong tu server
+    socket.on("thongbao", function (tb) {
+      document.getElementById("anhavt").src = "";
+      document.getElementById("tieude").value = "";
+      document.getElementById("text").value = "";
+      document.getElementById("file").value = "";
+      document.getElementById("tacgia").value = "";
+      CKEDITOR.instances['content'].setData('');
+      document.getElementById("thongbao").innerHTML = tb;
+      $('.cd-popup').addClass('is-visible');
+    })
+    // Check modal anh null
+    $(document).ready(function () {
+      $("#inser").click(function () {
+        var tenhinh = $("#themhinh").val();
+        if (tenhinh == "") {
+          document.getElementById("loi").innerHTML = "Mời bạn chọn ảnh"
+        }
+      })
+    })
+    jQuery(document).ready(function ($) {
+      //open popup
+
+      //close popup
+      $('.cd-popup').on('click', function (event) {
+        if ($(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup')) {
+          event.preventDefault();
+          $(this).removeClass('is-visible');
+        }
+      });
+      //close popup when clicking the esc keyboard button
+      $(document).keyup(function (event) {
+        if (event.which == '27') {
+          $('.cd-popup').removeClass('is-visible');
+        }
+      });
+    });
+
+    // XU LY TUYEN DUNG
+    $(document).ready(function () {
+      $("#tuyendung").click(function () {
+        var dieukienvt;
+        var dieukienyc;
+        var dieukienhs;
+        var vt = [];
+        for (var i = 0; i <= a; i++) {
+          var vitri = $("#vitri" + i).val();
+          var sl = $("#soluong" + i).val();
+          if (vitri == "" || sl == "") {
+            dieukienvt = false;
+            break;
+          }
+          else {
+
+            dieukienvt = true;
+
+          }
+        }
+        for (var j = 0; j <= b; j++) {
+          var yeucau = $("#yeucau" + j).val();
+          if (yeucau == "") {
+            dieukienyc = false;
+            break;
+          }
+          else {
+            dieukienyc = true;
+          }
+        }
+        for (var y = 0; y <= c; y++) {
+          var hoso = $("#hoso" + y).val();
+          if (hoso == "") {
+            dieukienhs = false;
+            break;
+          }
+          else {
+            dieukienhs = true;
+          }
+        }
+        if (dieukienvt == true && dieukienyc == true && dieukienhs == true) {
+          var array_vt = new Array();
+          var array_yc = new Array();
+          var array_hs = new Array();
+          for (var i = 0; i <= a; i++) {
+            var vitri = $("#vitri" + i).val();
+            var sl = $("#soluong" + i).val();
+            array_vt.push({ "vitri": vitri, 'soluong': sl })
+          }
+          for (var j = 0; j <= b; j++) {
+            var yeucau = $("#yeucau" + j).val();
+            array_yc.push({ "yeucau": yeucau })
+          }
+          for (var y = 0; y <= c; y++) {
+            var hoso = $("#hoso" + y).val();
+            array_hs.push({ "hoso": hoso });
+          }
+          socket.emit("luutuyendung", array_vt, array_yc, array_hs, a, b, c);
+          document.getElementById("thongbao").innerHTML = "Thêm thông tin tuyển dụng thành công"
+          $('.cd-popup').addClass('is-visible');
+          for (var i = 0; i <= a; i++) {
+            document.getElementById("vitri" + i).value = "";
+            document.getElementById("soluong" + i).value = "";
+
+          }
+          for (var j = 0; j <= b; j++) {
+            document.getElementById("yeucau" + j).value = "";
+
+          }
+          for (var y = 0; y <= c; y++) {
+            document.getElementById("hoso" + y).value = "";
+          }
+        }
+        else {
+          document.getElementById("thongbao").innerHTML = "Mời bạn kiểm tra thông tin";
+          $('.cd-popup').addClass('is-visible');
+
+        }
+      })
+    })
+    {
+      function checkso(bi) {
+
+        var bien = "#soluong" + bi;
+        var regex = /^[0-9]+$/;
+        var sl = $(bien).val();
+        var maloi = "loitd" + bi;
+        console.log(maloi);
+        if (sl.match(regex)) {
+
+          document.getElementById(maloi).innerHTML = ""
+        }
+        else {
+          document.getElementById(maloi).innerHTML = "Số lượng: Bạn vui lòng nhập kiểu số"
+        }
+      }
+    }
+    //XU LY DICH VU
+    function modelhinhdv() {
+      var selector = document.getElementById("themhinhdv");
+      var img = document.getElementById("showmodeldv");
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var loai = selector.files[0].type;
+        if (loai == "image/jpeg" || loai == "image/png") {
+          img.src = e.target.result;
+          document.getElementById("loidv").innerHTML = ""
+          $("#chenhinhdv").click(function () {
+            var tenhinh = selector.files[0].name;
+            var tenluu = Date.now() + '-' + tenhinh;
+            socket.emit("themhinhtt", { base64: e.target.result }, tenluu);
+            // var fil = document.getElementById("themhinh").value;
+            //  var filename = fil.replace(/^.*?([^\\\/]*)$/, '$1')
+            var editor = CKEDITOR.instances.content1;
+            var link = '../hinhanh/baiviet/';
+            value = '<p><img alt=""  width="70%" height="70%"  class="img-fluid" src="' + link + tenluu + '"/></p>'
+            if (editor.mode == 'wysiwyg') {
+              editor.insertHtml(value);
+            } else {
+              alert('You must be in WYSIWYG mode!');
+            }
+          })
+        }
+        else {
+          document.getElementById("loidv").innerHTML = "Bạn vui lòng chọn file ảnh"
+        }
+      }
+      reader.readAsDataURL(selector.files[0]);
+    }
+    //model - anh null
+    $(document).ready(function () {
+      $("#chenhinhdv").click(function () {
+        var tenhinh = $("#themhinhdv").val();
+        if (tenhinh == "") {
+          document.getElementById("loidv").innerHTML = "Mời bạn chọn ảnh"
+        }
+      })
+    })
+    //get noi dung dich vu
+    $(document).ready(function () {
+      $("#select").change(function () {
+        socket.emit("getdichvu");
+      })
+    })
+    socket.on("noidung", function (kq) {
+      var editor = CKEDITOR.instances.content1;
+      value = kq[0]['noidung']
+      editor.insertHtml(value);
+    })
+    // HANDEL GIOI THIEU CHUYEN KHOA
+    // chen anh vao content
+    function modelhinhck() {
+      var selector = document.getElementById("themhinhck");
+      var img = document.getElementById("showmodelck");
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var loai = selector.files[0].type;
+        if (loai == "image/jpeg" || loai == "image/png") {
+          img.src = e.target.result;
+          document.getElementById("loick").innerHTML = ""
+          $("#chenhinhck").click(function () {
+            var tenhinh = selector.files[0].name;
+            var tenluu = Date.now() + '-' + tenhinh;
+            socket.emit("themhinhtt", { base64: e.target.result }, tenluu);
+            // var fil = document.getElementById("themhinh").value;
+            //  var filename = fil.replace(/^.*?([^\\\/]*)$/, '$1')
+            var editor = CKEDITOR.instances.content2;
+            var link = '../hinhanh/baiviet/';
+            value = '<p><img alt=""  width="70%" height="70%"  class="img-fluid" src="' + link + tenluu + '"/></p>'
+            if (editor.mode == 'wysiwyg') {
+              editor.insertHtml(value);
+            } else {
+              alert('You must be in WYSIWYG mode!');
+            }
+          })
+        }
+        else {
+          document.getElementById("loick").innerHTML = "Bạn vui lòng chọn file ảnh"
+        }
+      }
+      reader.readAsDataURL(selector.files[0]);
+    }
+    //model - anh chuyenkhoa null
+    $(document).ready(function () {
+      $("#chenhinhck").click(function () {
+        var tenhinh = $("#themhinhck").val();
+        if (tenhinh == "") {
+          document.getElementById("loick").innerHTML = "Mời bạn chọn ảnh"
+        }
+      })
+    })
+    //get noi dung dich vu
+    $(document).ready(function () {
+      $("#selectck").change(function () {
+        var chuyenkhoaid = $("#selectck").val();
+        socket.emit("getchuyenkhoa", chuyenkhoaid);
+      })
+    })
+    socket.on("noidungck", function (kq) {
+      var editor = CKEDITOR.instances.content2;
+      value = kq[0]['noidung']
+      editor.setData(value);
+    })
+
+    // HANDEL GIOI THIEU PHONG KHÁM
+    function modelhinhgt() {
+      var selector = document.getElementById("themhinhgt");
+      var img = document.getElementById("showmodelgt");
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var loai = selector.files[0].type;
+        if (loai == "image/jpeg" || loai == "image/png") {
+          img.src = e.target.result;
+          document.getElementById("loigt").innerHTML = ""
+          $("#chenhinhgt").click(function () {
+            var tenhinh = selector.files[0].name;
+            var tenluu = Date.now() + '-' + tenhinh;
+            socket.emit("themhinhtt", { base64: e.target.result }, tenluu);
+            // var fil = document.getElementById("themhinh").value;
+            //  var filename = fil.replace(/^.*?([^\\\/]*)$/, '$1')
+            var editor = CKEDITOR.instances.content3;
+            var link = '../hinhanh/baiviet/';
+            value = '<p><img alt=""  width="70%" height="70%"  class="img-fluid" src="' + link + tenluu + '"/></p>'
+            if (editor.mode == 'wysiwyg') {
+              editor.insertHtml(value);
+            } else {
+              alert('You must be in WYSIWYG mode!');
+            }
+          })
+        }
+        else {
+          document.getElementById("loigt").innerHTML = "Bạn vui lòng chọn file ảnh"
+        }
+      }
+      reader.readAsDataURL(selector.files[0]);
+    }
+    //model - anh null
+    $(document).ready(function () {
+      $("#chenhinhgt").click(function () {
+        var tenhinh = $("#themhinhgt").val();
+        if (tenhinh == "") {
+          document.getElementById("loigt").innerHTML = "Mời bạn chọn ảnh"
+        }
+      })
+    })
+    //get noi dung gioi thieu
+    $(document).ready(function () {
+      $("#select").change(function () {
+        socket.emit("getgioithieu");
+      })
+    })
+    socket.on("noidunggt", function (kq) {
+      var editor = CKEDITOR.instances.content3;
+      value = kq[0]['noidung']
+      editor.insertHtml(value);
+    })
+    function anhdaidiengt() {
+      var avt = document.getElementById("avtgt");
+      var showavt = document.getElementById("showanhdaidiengt");
+      var loai=avt.files[0].type;
+      
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        if (loai == "image/jpeg" || loai == "image/png") {
+          showavt.src = e.target.result;
+        }
+        else {
+          document.getElementById("thongbao").innerHTML = "Bạn vui lòng chọn file ảnh";
+        $('.cd-popup').addClass('is-visible');
+        }
+
+        
+      }
+      reader.readAsDataURL(avt.files[0]);
+    }
+    //HANDEL BAC SI
+    function modelhinhbs() {
+      var selector = document.getElementById("themhinhbs");
+      var img = document.getElementById("showhinhbs");
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var loai = selector.files[0].type;
+        if (loai == "image/jpeg" || loai == "image/png") {
+          img.src = e.target.result;
+          document.getElementById("loigt").innerHTML = ""
+          $("#chenhinhbs").click(function () {
+            var tenhinh = selector.files[0].name;
+            var tenluu = Date.now() + '-' + tenhinh;
+            socket.emit("themhinhtt", { base64: e.target.result }, tenluu);
+            // var fil = document.getElementById("themhinh").value;
+            //  var filename = fil.replace(/^.*?([^\\\/]*)$/, '$1')
+            var editor = CKEDITOR.instances.content4;
+            var link = '../hinhanh/baiviet/';
+            value = '<p><img alt=""  width="70%" height="70%"  class="img-fluid" src="' + link + tenluu + '"/></p>'
+            if (editor.mode == 'wysiwyg') {
+              editor.insertHtml(value);
+            } else {
+              alert('You must be in WYSIWYG mode!');
+            }
+          })
+        }
+        else {
+          document.getElementById("loibs").innerHTML = "Bạn vui lòng chọn file ảnh"
+        }
+      }
+      reader.readAsDataURL(selector.files[0]);
+    }
+    //model - anh null
+    $(document).ready(function () {
+      $("#chenhinhbs").click(function () {
+        var tenhinh = $("#themhinhbs").val();
+        if (tenhinh == "") {
+          document.getElementById("loibs").innerHTML = "Mời bạn chọn ảnh"
+        }
+      })
+    })
+  // show anh avt bac si
+  function anhbs() {
+      var avt = document.getElementById("anhdaidienbs");
+      var showavt = document.getElementById("showavtbs");
+      var loai=avt.files[0].type;
+      
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        if (loai == "image/jpeg" || loai == "image/png") {
+          showavt.src = e.target.result;
+        }
+        else {
+          document.getElementById("thongbao").innerHTML = "Bạn vui lòng chọn file ảnh";
+        $('.cd-popup').addClass('is-visible');
+        }
+
+        
+      }
+      reader.readAsDataURL(avt.files[0]);
+    }
+ 
+    
+
+ </script>
+</head> <% include element/header.ejs %>
+
+<body>
+  <!--SELECT LOẠI BAI VIET-->
+  <div class=" container form-style-1">
+    <p
+      style="margin-top: 190px; margin-bottom: 20px; text-align: center; color:#007EA7; font-weight: bold ; font-size: 30px;">
+      CHUYÊN MỤC BÀI VIẾT</p>
+    <select name="select" id="select"  class="combox-select"> <% for(var i = 0;i < loaibaiviet.length;i++)
+    {
+    %> <option value="<%= loaibaiviet[i]['loaibaiviet_id'] %>" class="combox-option"><%= loaibaiviet[i]['tenloai'] %>
+      </option> <%
+    } %> </select>
+    <div ng-controller="DemoCtrl as vm" layout="column" ng-cloak="" ng-app="app">
+      <md-content class="box-content">
+        <!--FORM TIN TUC-->
+        <div id="info1">
+          <span id="label">Tiêu đề</span>
+          <input type="text" name="tieude" value="" id="tieude" class="input-content">
+          <div id="wp-content-media-buttons" class="wp-media-buttons" style="margin-top: 20px;">
+            <button type="button" class="themmedia" data-toggle="modal" data-target="#myModal"><span
+                class="glyphicon glyphicon-file "></span> Thêm Media</button>
+            <!-- The Modal -->
+            <div class="modal" id="myModal">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h4 class="modal-title">Modal Heading</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  <!-- Modal body -->
+                  <div class="modal-body">
+                    <input type="file" id="themhinh" name="themhinh" onchange="ahinh();">
+                    <img id="showhinh" src="" width="40%" height="40%">
+                  </div>
+                  <!-- Modal footer -->
+                  <div id="loi" style="color: brown; float: left;"></div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" name="inser" id="inser" value="chenvaobaiviet">Submit
+                    </button>
+                    <button type="submit" class="btn btn-primary" name="closemodal" id="closemodal" data-dismiss="modal"
+                      onclick="document.getElementById('themhinh').value=''; document.getElementById('showhinh').src='' ">Close
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <md-input-container class="md-block">
+            <textarea ck-editor ng-model="vm.content" md-select-on-focus="" id="content"
+              style="padding: 0; margin: 0;"></textarea>
+          </md-input-container>
+          <md-input-container class="md-block" style="margin: 0px;">
+            <input ng-model="vm.content" style="opacity: 0;" name="text" id="text" />
+          </md-input-container>
+          <div class="row" style="padding:16px; background: #c9e0ff;">
+            <div class="upload-btn-wrapper col-md-4">
+              <div class="row">
+                <button class="btn">Ảnh đại diện <span class="glyphicon glyphicon-chevron-down"></span></button>
+                <input type="file" name="file" id="file" onchange="anhdaidien();">
+              </div>
+              <div class="row">
+                <img id="anhavt" width="50%" height="50%" src="">
+              </div>
+            </div>
+            <div class="col-md-8" style="padding-left: 0px;">
+              <span id="label"> Tác giả</span> <input type="text" name="tacgia" id="tacgia">
+              <%for(var l=0;l< loaitintuc.length; l++)
+              {%>
+              <input type="radio" name="loaitintuc" id="loaitt<%=loaitintuc[l]['loaitintuc_id']%>"
+                value="<%=loaitintuc[l]['loaitintuc_id']%>"> <%=loaitintuc[l]['tenloai']%><br>
+              <%}%>
+              
+              <button type="button" id="tintuc" name="tintuc" onclick="baiviettintuc();" class="cd-popup-trigger ">Lưu bài viết</button>
+            </div>
+          </div>
+        </div>
+        <!--FORM TUYEN DUNG-->
+        <div id="info2">
+          <div id="info3">
+            <h1 class="content-title-child" style="text-align: center;">VỊ TRÍ</h1>
+            <div class="add-number">
+              <p>Thêm vị trí</p> 
+              <span><input id="them" value="+" placeholder="them" type="button" class="plusButton"></span> 
+              <span><input id="xoa" value="-" placeholder="xoa" type="button" class="plusButton"></span>
+            </div>
+            <div>
+              <p class="content-title-child">Vị trí: </p>
+              <input type="text" id="vitri0" name="vitri0"> 
+              <p class="content-title-child">Số lượng </p>
+              <input type="number" id="soluong0" onblur="checkso(0);" name="soluong0" min="1" value="1">
+              <p id="loitd0" style="color: red;"></p>
+              <hr>
+            </div>
+          </div>
+          <h1 class="content-title-child" style="text-align: center;">YÊU CẦU</h1>
+            <div class="add-number" style="margin-bottom: 10px;">
+              <p>Thêm yêu cầu</p> 
+              <span><input id="themyc" value="+" placeholder="them" type="button" class="plusButton"></span> 
+              <span><input id="xoayc" value="-" placeholder="xoayc" type="button" class="plusButton"></span>
+            </div>
+          <div id="info4">
+            <div class="abc-ex">
+              <input type="text" id="yeucau0" name="yeucau0">
+              <hr>
+            </div>
+          </div>
+          <h1 class="content-title-child" style="text-align: center;">HỒ SƠ DỰ TUYỂN</h1>
+          <div class="add-number" style="margin-bottom: 10px;">
+              <p>Thêm hồ sơ dự tuyển</p> 
+              <span><input id="themhs" value="+" placeholder="them" type="button" class="plusButton"></span> 
+              <span><input id="xoahs" value="-" placeholder="xoayc" type="button" class="plusButton"></span>
+            </div>
+          <div id="info5">
+            <div>
+              <input type="text" id="hoso0" name="hoso0">
+              <hr>
+            </div>
+          </div>
+          <input type="button" value="THÊM TUYỂN DỤNG" id="tuyendung" name="tuyendung" class="customButton" style="margin-bottom: 20px;">
+        </div>
+        <!--FORM QUY TRỈNH KHAM BENH -->
+        <div id="dichvu">
+          <form method="post" action="/capnhatdv" id="formform" style="padding: 50px; ">
+            <div id="wp-content-media-buttons" class="wp-media-buttons">
+              <button type="button" data-toggle="modal" data-target="#myModal1"><span class="wp-media-buttons-icon"></span> Thêm Media </button>
+              <label id="error_customerName" style="text-transform: inherit;font-style: italic;color: red;font-size: 13px;font-weight: 400;">
+                <!-- The Modal -->
+                <div class="modal" id="myModal1">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <h2 class="modal-title">Thêm hình vào bài viết</h2>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      </div>
+                      <!-- Modal body -->
+                      <div class="modal-body">
+                        <input type="file" id="themhinhdv" name="themhinhdv" onchange="modelhinhdv();">
+                        <img src="" id="showmodeldv" width="40%" height="40%">
+                      </div>
+                      <!-- Modal footer -->
+                      <p id="loidv"></p>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" name="chenhinhdv" id="chenhinhdv">Submit </button>
+                        <button type="button" class="btn btn-primary" name="closemodal" id="closemodal" data-dismiss="modal" onclick="document.getElementById('themhinhdv').value='';document.getElementById('showmodeldv').src=''">Close </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <md-input-container class="md-block">
+              <textarea ck-editor ng-model="vm.content1" md-select-on-focus="" id="content1"></textarea>
+            </md-input-container>
+            <md-input-container class="md-block">
+              <input ng-model="vm.content1" type="text" name="noidungdv" id="noidungdv" style="opacity: 0;" />
+            </md-input-container>
+            <button type="button" id="capnhatdv" formaction="/capnhatdv" onclick="checkAuctionName();" class="customButton">Cập nhật dịch vụ</button>
+          </form>
+        </div>
+        <!--FORM CHUYENKHOA-->
+        <div id="chuyenkhoa">
+            <form method="post" action="/gioithieuchuyenkhoa" id="formdv" style="padding: 50px; ">
+              <select name="selectck" id="selectck" class="combox-select">
+                  <option value="0" class="combox-option" >Chọn chuyên khoa cần cập nhật thông tin</option>
+                <% for(var k = 0;k < chuyenkhoa.length;k++)
+                {
+                %> <option value="<%= chuyenkhoa[k]['chuyenkhoa_id'] %>" class="combox-option">
+                <%= chuyenkhoa[k]['tenchuyenkhoa'] %></option> <%
+                } %> </select>
+              <div id="wp-content-media-buttons" class="wp-media-buttons">
+                <button type="button" data-toggle="modal" data-target="#myModal2"><span
+                    class="wp-media-buttons-icon"></span> Thêm Media </button>
+                <label id="error_ck"
+                  style="text-transform: inherit;font-style: italic;color: red;font-size: 13px;font-weight: 400;">
+                  <!-- The Modal -->
+                  <div class="modal" id="myModal2">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                          <h2 class="modal-title">Thêm hình vào bài viết</h2>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                          <input type="file" id="themhinhck" name="themhinhck" onchange="modelhinhck();">
+                          <img src="" id="showmodelck" width="40%" height="40%">
+                        </div>
+                        <!-- Modal footer -->
+                        <p id="loick"></p>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" name="chenhinhck" id="chenhinhck">Submit
+                          </button>
+                          <button type="button" class="btn btn-primary" name="closemodal" id="closemodal"
+                            data-dismiss="modal"
+                            onclick="document.getElementById('themhinhck').value='';document.getElementById('showmodelck').src=''">Close
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              <md-input-container class="md-block">
+                <textarea ck-editor ng-model="vm.content2" md-select-on-focus="" id="content2"></textarea>
+              </md-input-container>
+              <md-input-container class="md-block">
+                <input ng-model="vm.content2" type="text" name="noidungck" id="noidungck" style="opacity: 0;" />
+              </md-input-container>
+              <button type="button" id="luuchuyenkhoa" formaction="/luuchuyenkhoa" class="customButton"
+                onclick="capnhapck();">Cập nhật thông tin chyên khoa</button>
+              </form>
+            </div>
+            <!--FORM GIOI THIEU-->
+            <div id="gioithieu">
+              <form method="post" action="/gioithieu" id="formgioithieu" enctype="multipart/form-data" style="padding: 50px; ">
+                <div id="wp-content-media-buttons" class="wp-media-buttons">
+                  <button type="button" data-toggle="modal" data-target="#myModal3"><span
+                      class="wp-media-buttons-icon"></span> Thêm Media </button>
+                  <label id="error_customerName"
+                    style="text-transform: inherit;font-style: italic;color: red;font-size: 13px;font-weight: 400;">
+                    <!-- The Modal -->
+                    <div class="modal" id="myModal3">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <!-- Modal Header -->
+                          <div class="modal-header">
+                            <h2 class="modal-title">Thêm hình vào bài viết</h2>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          </div>
+                          <!-- Modal body -->
+                          <div class="modal-body">
+                            <input type="file" id="themhinhgt" name="themhinhgt" onchange="modelhinhgt();">
+                            <img src="" id="showmodelgt" width="40%" height="40%">
+                          </div>
+                          <!-- Modal footer -->
+                          <p id="loigt"></p>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" name="chenhinhgt" id="chenhinhgt">Submit
+                            </button>
+                            <button type="button" class="btn btn-primary" name="closemodal" id="closemodal"
+                              data-dismiss="modal"
+                              onclick="document.getElementById('themhinhgt').value='';document.getElementById('showmodelgt').src=''">Close
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <md-input-container class="md-block">
+                  <textarea ck-editor ng-model="vm.content3" md-select-on-focus="" id="content3"></textarea>
+                </md-input-container>
+                <md-input-container class="md-block">
+                  <input ng-model="vm.content3" type="text" name="noidunggt" id="noidunggt" style="opacity: 0;" />
+                </md-input-container>
+
+
+
+                <div class="row" style="padding:16px; background: #c9e0ff;">
+                    <div class="upload-btn-wrapper col-md-4">
+                      <div class="row">
+                        <button class="btn">Ảnh đại diện <span class="glyphicon glyphicon-chevron-down"></span></button>
+                        <input type="file" name="avtgt" id="avtgt" onchange="anhdaidiengt();">
+                      </div>
+                      <div class="row">
+                        <img id="showanhdaidiengt" width="50%" height="50%" src="">
+                      </div>
+                    </div>
+                    <div class="col-md-8" style="padding-left: 0px;">
+                      <span id="label"> Video đại diện</span> <input type="text" name="videogt" id="videogt">   
+                      
+                      
+                    <button type="button" id="capnhatgt" onclick="capnhatgioithieu();" class="customButton">Cập nhật giới
+                    thiệu </button>
+                    </div>
+                  </div>
+
+
+              </form>
+            </div>
+
+            <!--ĐỘI NGŨ BÁC SĨ-->
+            <div id="bacsi">
+              <form method="post" action="/bacsi" id="formbacsi" style="padding: 50px;" enctype="multipart/form-data">
+              <span id="label">Tên bác sĩ</span>
+              <input type="text" name="tenbs" value="" id="tenbs" class="input-content">
+              <div id="wp-content-media-buttons" class="wp-media-buttons" style="margin-top: 20px;">
+                <button type="button" class="themmedia" data-toggle="modal" data-target="#myModal4"><span
+                    class="glyphicon glyphicon-file "></span> Thêm Media</button>
+                <!-- The Modal -->
+                <div class="modal" id="myModal4">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <h4 class="modal-title">Thêm ảnh vào bài viết</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      </div>
+                      <!-- Modal body -->
+                      <div class="modal-body">
+                        <input type="file" id="themhinhbs" name="themhinhbs" onchange="modelhinhbs();">
+                        <img id="showhinhbs" src="" width="40%" height="40%">
+                      </div>
+                      <!-- Modal footer -->
+                      <div id="loibs" style="color: red; float: left;"></div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" name="chenhinhbs" id="chenhinhbs"
+                          value="chenvaobaiviet">Submit
+                        </button>
+                        <button type="submit" class="btn btn-primary" name="closemodalbs" id="closemodalbs"
+                          data-dismiss="modal"
+                          onclick="document.getElementById('themhinhbs').value=''; document.getElementById('showhinhbs').src='' ">Close
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <md-input-container class="md-block">
+                <textarea ck-editor ng-model="vm.content4" md-select-on-focus="" id="content4"
+                  style="padding: 0; margin: 0;"></textarea>
+              </md-input-container>
+              <md-input-container class="md-block" style="margin: 0px;">
+                <input ng-model="vm.content4" style="opacity: 0;" name="noindungbs" id="noindungbs" />
+              </md-input-container>
+              <div class="row" style="padding:16px; background: #c9e0ff;">
+                <div class="upload-btn-wrapper col-md-4">
+                  <div class="row">
+                    <button class="btn">Ảnh đại diện <span class="glyphicon glyphicon-chevron-down"></span></button>
+                    <input type="file" name="anhdaidienbs" id="anhdaidienbs" onchange="anhbs();">
+                  </div>
+                  <div class="row">
+                    <img id="showavtbs" width="50%" height="50%" src="">
+                  </div>
+                </div>
+                <div class="col-md-8" style="padding-left: 0px;">
+                  <span id="label">Chuyên khoa</span>
+                  <select name="selectckbs" id="selectckbs" class="combox-select">
+                    <% for(var i=0; i < chuyenkhoa.length; i++)
+                    {%>
+                      <option value="<%=chuyenkhoa[i]['chuyenkhoa_id']%>" class="combox-option"><%=chuyenkhoa[i]['tenchuyenkhoa']%></option>
+                   <% } %>
+                    
+                  </select>
+                  <span id="label">Chức vụ</span> <input type="text " name="chucvu" id="chucvu">
+
+                  <button type="button" id="submitbs" name="submitbs" onclick="baivietbacsi();"
+                    class="cd-popup-trigger ">Lưu bài viết</button>
+                </div>
+              </div>
+            </form>
+            </div>
+      </md-content>
+      <!-- popup alert-->
+      <div class="cd-popup" role="alert">
+        <div class="cd-popup-container">
+          <p id="thongbao" style="color:red;"></p>
+          <!--<ul class="cd-buttons">
+                <li><a href="#0">Yes</a></li>
+                <li><a href="#0">No</a></li>
+              </ul> -->
+          <a href="#0" class="cd-popup-close img-replace">Close</a>
+        </div> <!-- cd-popup-container -->
+      </div> <!-- cd-popup -->
+    </div>
+  </div>
+  <!-- start footer Area --> <%include element/footer.ejs%>
+  <!-- End footer Area -->
+  <script> 
+    // Them vi tri tuyen dung
+    var a = 0;
+    var b = 0;
+    var c = 0;
+
+    $("#them").click(function () {
+      a++
+      $("div#info3").append('<div class="abc-ex" id="vt' + a + '">\n' +
+        '                            <p class="content-title-child">Vị trí: </p> <input type="text" id="vitri' + a + '" name="vitri' + a + '">\n' +
+        '                            <p class="content-title-child">Số lượng </p> <input  min="1" value="1"  type="number" onblur="checkso(' + a + ')"  id="soluong' + a + '" name="soluong' + a + '" >\n' +
+        ' <p id="loitd' + a + '" style="color: red;"></p>' +
+        '                        <hr></div>');
+
+
+    });
+    // Them yeu cau
+    $("#themyc").click(function () {
+      b++;
+      $("div#info4").append('<div id="yc' + b + '">\n' +
+        '                            <input type="text" id="yeucau' + b + '" name="yeucau' + b + '">\n' +
+        '                        <hr></div>');
+
+    });
+    // Them ho so
+    $("#themhs").click(function () {
+      c++;
+      $("div#info5").append('<div id="hs' + c + '">\n' +
+        '                            <input type="text" id="hoso' + c + '" name= "hoso' + c + '">\n' +
+        '                        <hr></div>');
+
+    });
+    // xoa vitri
+    $("#xoa").click(function () {
+      var vitri = '#vt' + a;
+      if (a > 0) {
+        $(vitri).remove();
+        a--;
+      }
+
+    });
+    $("#xoayc").click(function () {
+      var vitri = '#yc' + b;
+      if (b > 0) {
+        $(vitri).remove();
+        b--;
+      }
+
+    });
+    $("#xoahs").click(function () {
+      if (c > 0) {
+        var vitri = '#hs' + c;
+        $(vitri).remove();
+        c--;
+      }
+    });
+
+    //Hàm đọc và hiển thị thông tin
+    function displayVals() {
+      var singleValues = $("#select").val();
+      if (singleValues == 1) {
+        $("div#info1").show();
+        $("div#info2").hide();
+        $("div#dichvu").hide();
+        $("div#chuyenkhoa").hide();
+        $("div#gioithieu").hide();
+        $("div#bacsi").hide();
+        
+      } else if (singleValues == 2) {
+        $("div#info1").hide();
+        $("div#info2").show();
+        $("div#dichvu").hide();
+        $("div#chuyenkhoa").hide();
+        $("div#gioithieu").hide();
+        $("div#bacsi").hide();
+      } else if (singleValues == 3) {
+        $("div#info1").hide();
+        $("div#info2").hide();
+        $("div#dichvu").show();
+        $("div#chuyenkhoa").hide();
+        $("div#gioithieu").hide();
+        $("div#bacsi").hide();
+      } else if (singleValues == 4) {
+        $("div#info1").hide();
+        $("div#info2").hide();
+        $("div#dichvu").hide();
+        $("div#chuyenkhoa").show();
+        $("div#gioithieu").hide();
+        $("div#bacsi").hide();
+      }
+      else if (singleValues == 5) {
+        $("div#info1").hide();
+        $("div#info2").hide();
+        $("div#dichvu").hide();
+        $("div#chuyenkhoa").hide();
+        $("div#gioithieu").show();
+        $("div#bacsi").hide();
+      }
+      else if (singleValues == 6) {
+        $("div#info1").hide();
+        $("div#info2").hide();
+        $("div#dichvu").hide();
+        $("div#chuyenkhoa").hide();
+        $("div#gioithieu").hide();
+        $("div#bacsi").show();
+      }
+
+
+    }
+
+
+    //Bắt sự kiện thi thay đổi giá trị
+    $("#select").change(displayVals);
+
+    displayVals();
+
+
+
+
+  </script>
+  <!--
+Copyright 2016 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that can be in foundin the LICENSE file at https://material.angularjs.org/license.
+-->
+  <!-- partial -->
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js'></script>
+  <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/svg-assets-cache.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.5.6/angular-sanitize.min.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.js'></script>
+  <script src='https://cdn.ckeditor.com/4.7.0/full/ckeditor.js'></script>
+  <script src="handel/check.js"></script>
+  <script>
+  </script>
+  <script src="script.js"></script>
+</body>
+
+</html>

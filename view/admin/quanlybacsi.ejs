@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Health</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Health medical template project">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Custom fonts for this template-->
+  <link href="../../new/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <!-- Custom styles for this template-->
+  <link rel="stylesheet" href="../../new/admin/css/sb-admin-2.min.css">
+  <link rel="stylesheet" href="../../new/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../new/css/style.css">
+  <link rel="stylesheet" href="../../new/css/custom.css">
+  <link rel="stylesheet" href="../../new/css/custom2.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="../../new/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function filterloaitintuc() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("chuyenkhoa");
+
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable");
+      var tbody = table.getElementsByTagName("tbody")[0];
+      tr = tbody.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[4];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase() == filter) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+    var a = [];
+    $(document).ready(function () {
+      $("#menuBS").addClass("active");
+      var checkboxes = $("input[type='checkbox']")
+
+      checkboxes.click(function () {
+        v = $(this).is(":checked");
+        if (v == true) {
+          a.push($(this).val())
+        }
+        else {
+          var index = a.indexOf($(this).val());
+          if (index > -1) {
+            a.splice(index, 1);
+          }
+        }
+      });
+    });
+    $(document).ready(function () {
+      $("#xoa").click(function () {
+        $("#a").val(a);
+        if ($("#a").val() != "") {
+          $("#xoabacsi").submit();
+        }
+      })
+    })
+  </script>
+</head>
+
+<body id="page-top" style="min-width: 1000px;">
+  <div id="wrapper"> <% include ../element/header_admin.ejs %> <div id="content-wrapper" class="d-flex flex-column">
+      <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style="display: block; padding-top: 20px;">
+        <!-- Sidebar Toggle (Topbar) -->
+        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+          <i class="fa fa-bars"></i>
+        </button>
+        <span style=" text-align: center; color:#4e73df; font-weight: bold ; font-size: 20px;">QUẢN LÝ BÁC SĨ</span>
+      </nav>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <select id="chuyenkhoa" onchange="filterloaitintuc()" class="customCombobox"> <%if(kq!="")
+              {
+                for(var k=0; k < chuyenkhoa.length ; k++)
+                {
+                  %> <option value="<%=chuyenkhoa[k]['tenchuyenkhoa']%>"><%=chuyenkhoa[k]['tenchuyenkhoa']%></option> <%
+                }
+              }%> </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="customTable">
+              <table class="table table-image" id="myTable">
+                <thead>
+                  <tr>
+                    <th scope="col">STT</th>
+                    <th scope="col">Hình ảnh</th>
+                    <th scope="col">Tên bác sĩ</th>
+                    <th scope="col" class="title">Chức vụ</th>
+                    <th scope="col">Chuyên khoa</th>
+                    <th scope="col">Sửa</th>
+                    <form action="/xoabacsi" id="xoabacsi" method="POST">
+                      <input type="hidden" value="" id="a" name="a">
+                      <th scope="col"><input type="button" id="xoa" value="Xóa"></th>
+                    </form>
+                  </tr>
+                </thead>
+                <tbody> <% if(kq!=""){ for(var i=0;i< kq.length; i++) {  %> <tr class="box-object">
+                    <td class="stt"><%=i+1%></td>
+                    <td class="image">
+                      <img src="../../hinhanh/baiviet/<%=kq[i]['hinhanh']%>" class="img-fluid img-thumbnail" alt="Sheep">
+                    </td>
+                    <td class="tieude"><%=kq[i]['tenbacsi']%></td>
+                    <td class="ngaydang"><%=kq[i]['chucvu']%></td>
+                    <td class="tenloai"><%=kq[i]['tenchuyenkhoa']%></td>
+                    <td class="edit"><a href="/admin/dieuchinhbacsi/<%=kq[i]['bacsi_id']%>"><i class="fas fa-pen-square"></i></a></td>
+                    <td class="del">
+                      <input type="checkbox" value="<%=kq[i]['bacsi_id']%>" id="<%=kq[i]['bacsi_id']%>">
+                      <label for="<%=kq[i]['bacsi_id']%>"></label>
+                    </td>
+                  </tr> <% }}%> </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../../new/admin/js/sb-admin-2.min.js"></script>
+</body>
+
+</html>

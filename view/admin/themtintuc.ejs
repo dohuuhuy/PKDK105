@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>SB Admin 2 - Dashboard</title>
+  <!-- Custom styles for this template-->
+  <link rel='stylesheet' href='https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.css'>
+  <link href="../../new/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="../../new/admin/css/sb-admin-2.min.css">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../newstyle.css">
+  <link rel="stylesheet" href="../../new/css/custom2.css">
+  <link rel="stylesheet" href="../../new/css/styleBtn.css">
+  <link rel="stylesheet" href="../../new/css/radioStyle.css">
+  <link rel="stylesheet" href="../../new/css/inputStyle.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="socket.io/socket.io.js"></script>
+  <script>
+    $(window).scroll(function () {
+      var top = 200;
+      if ($(window).scrollTop() >= top) {
+        $("#navbarMain").css("position", "fixed");
+        $("#navbarMain").css("top", "0");
+        $("#navbarMain").css("z-index", "1000");
+      } else {
+        $("#navbarMain").css("position", "");
+        $("#navbarMain").css("top", "");
+        $("#navbarMain").css("z-index", "");
+      }
+    });
+  </script>
+  <script>
+    var socket = io("http://103.81.86.79:8080");
+    $(document).ready(function () {
+      $("#menuBV").addClass("active");
+      socket.emit("menuchuyenkhoa");
+      socket.on("returnmenu", function (data) {
+        for (var u = 0; u < data.length; u++) {
+          $("#menuck").append('<a href="/chuyenkhoa/' + data[u]['chuyenkhoa_id'] + '"><li  >' + data[u]['tenchuyenkhoa'] + '</li></a>');
+        }
+      })
+    })
+  </script>
+  <script>
+    var socket = io("http://103.81.86.79:8080");
+    function ahinh() {
+      var selector = document.getElementById("themhinh");
+      var video = document.getElementById("showvideo");
+      var img = document.getElementById("showhinh");
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var loai = selector.files[0].type;
+        if (loai == "image/jpeg" || loai == "image/png") {
+          img.src = e.target.result;
+          document.getElementById("loi").innerHTML = ""
+          $("#inser").click(function () {
+            var tenhinh = selector.files[0].name;
+            var tenluu = Date.now() + '-' + tenhinh;
+            socket.emit("themhinhtt", { base64: e.target.result }, tenluu);
+            // var fil = document.getElementById("themhinh").value;
+            setTimeout(function () {
+              var editor = CKEDITOR.instances.content;
+              var link = '../../hinhanh/baiviet/';
+              var value = '<p><img width="70%" height="70%"  class="img-fluid" src="' + link + tenluu + '"/></p>'
+              if (editor.mode == 'wysiwyg') {
+                var imgHtml = CKEDITOR.dom.element.createFromHtml(value);
+                editor.insertElement(imgHtml);
+                //Event for load image in edit text
+                $('#myModal').modal('hide');
+                $('#themhinh').val('');
+                $("#showhinh").attr("src", "");
+                $('.modal-backdrop').remove();
+              } else {
+                alert('You must be in WYSIWYG mode!');
+              }
+            }, 400);
+          })
+        }
+        else {
+          document.getElementById("loi").innerHTML = "Bạn vui lòng chọn file ảnh"
+        }
+      }
+      reader.readAsDataURL(selector.files[0]);
+    }
+    // emit bai viet tin tuc
+    function baiviettintuc() {
+      var tieude = document.getElementById("tieude").value;
+      var noidung = document.getElementById("text").value;
+      var avt = document.getElementById("file").value;
+      var tacgia = document.getElementById("tacgia").value;
+
+      var loaitintuc1 = document.getElementById("loaitt1").checked;
+      var loaitintuc2 = document.getElementById("loaitt2").checked;
+      var loaitt1 = document.getElementById("loaitt1").value;
+      var loaitt2 = document.getElementById("loaitt2").value;
+      if (tieude != "" && noidung != "" && avt != "" && tacgia != "") {
+        if (loaitintuc1 == true || loaitintuc2 == true) {
+          var loaianh = document.getElementById("file").files[0].type;
+
+          if (loaianh == "image/jpeg" || loaianh == "image/png" || loaianh == "video/mp4") {
+
+            var hinh = document.getElementById("file");
+            var reader = new FileReader();
+            reader.onload = function (e) {
+              var tenhinh = hinh.files[0].name;
+              var tenluu = Date.now() + '-' + tenhinh;
+              socket.emit("themhinhtt", { base64: e.target.result }, tenluu);
+              if (loaitintuc1 == true) {
+                socket.emit("thembaitt", tieude, noidung, tenluu, tacgia, loaitt1);
+              }
+              else {
+                socket.emit("thembaitt", tieude, noidung, tenluu, tacgia, loaitt2);
+              }
+            }
+            reader.readAsDataURL(document.getElementById("file").files[0]);
+          }
+          else {
+            document.getElementById("thongbao").innerHTML = "Mời bạn chọn file ảnh"
+            $('.cd-popup').addClass('is-visible');
+
+          }
+        }
+        else {
+          document.getElementById("thongbao").innerHTML = "Mời bạn chọn loại tin tức"
+          $('.cd-popup').addClass('is-visible');
+        }
+      }
+      else {
+        document.getElementById("thongbao").innerHTML = "Mời bạn nhập đầy đủ thông tin"
+        $('.cd-popup').addClass('is-visible');
+      }
+
+    }
+    // show anh avt
+    function anhdaidien() {
+      var avt = document.getElementById("file");
+      var showavt = document.getElementById("anhavt");
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        showavt.src = e.target.result;
+      }
+      reader.readAsDataURL(avt.files[0]);
+    }
+    //thong  bao thanh cong tu server
+    socket.on("thongbao", function (tb) {
+      document.getElementById("anhavt").src = "";
+      document.getElementById("tieude").value = "";
+      document.getElementById("text").value = "";
+      document.getElementById("file").value = "";
+      document.getElementById("tacgia").value = "";
+      CKEDITOR.instances['content'].setData('');
+      document.getElementById("thongbao").innerHTML = tb;
+      $('.cd-popup').addClass('is-visible');
+    })
+    // Check modal anh null
+    $(document).ready(function () {
+      $("#inser").click(function () {
+        var tenhinh = $("#themhinh").val();
+        if (tenhinh == "") {
+          document.getElementById("loi").innerHTML = "Mời bạn chọn ảnh"
+        }
+      })
+    })
+    jQuery(document).ready(function ($) {
+      //open popup
+
+      //close popup
+      $('.cd-popup').on('click', function (event) {
+        if ($(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup')) {
+          event.preventDefault();
+          $(this).removeClass('is-visible');
+        }
+      });
+      //close popup when clicking the esc keyboard button
+      $(document).keyup(function (event) {
+        if (event.which == '27') {
+          $('.cd-popup').removeClass('is-visible');
+        }
+      });
+    });
+  </script>
+</head>
+
+<body id="page-top">
+  <!-- Page Wrapper -->
+  <div id="wrapper"> <% include ../element/header_admin.ejs %>
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <!-- Main Content -->
+      <div id="content" style="flex: 0">
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+          <span style=" text-align: center; color:#007EA7; font-weight: bold ; font-size: 20px;">THÊM TIN TỨC</span>
+        </nav>
+      </div>
+      <div class="container-fluid form-style-1">
+        <div ng-controller="DemoCtrl as vm" layout="column" ng-cloak="" ng-app="app">
+          <md-content class="box-content">
+            <!--FORM TIN TUC-->
+            <div id="info1">
+              <span id="label">Tiêu đề</span>
+              <input type="text" name="tieude" value="" id="tieude" class="input-content">
+              <div id="wp-content-media-buttons" class="wp-media-buttons" style="margin-top: 20px;">
+                <button class="btn btn--contained-success ripple" ripple="ripple" data-toggle="modal" data-target="#myModal">Thêm ảnh<div class="ripple__ink"></div></button>
+                <!-- The Modal -->
+                <div class="modal modalCustom" id="myModal">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <button type="button" class="close buttonClose" data-dismiss="modal">&times;</button>
+                      </div>
+                      <!-- Modal body -->
+                      <div class="modal-body">
+                        <h4 class="titleModal">Thêm ảnh vào bài viết</h4>
+                        <input type="file" id="themhinh" name="themhinh" onchange="ahinh();">
+                        <img id="showhinh" src="" width="40%" height="40%">
+                      </div>
+                      <!-- Modal footer -->
+                      <div id="loi" style="color: brown; float: left;"></div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn--contained-info ripple" ripple="ripple" name="inser" id="inser">Xác nhận<div class="ripple__ink"></div></button>
+                        <button type="submit" class="btn btn--contained-default ripple" ripple="ripple" name="closemodal" id="closemodal" data-dismiss="modal" onclick="document.getElementById('themhinh').value=''; document.getElementById('showhinh').src='' ">Hủy<div class="ripple__ink"></div></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <md-input-container class="md-block">
+                <textarea ck-editor ng-model="vm.content" md-select-on-focus="" id="content" style="padding: 0; margin: 0;"></textarea>
+              </md-input-container>
+              <md-input-container class="md-block" style="margin: 0px;">
+                <input ng-model="vm.content" style="opacity: 0;" name="text" id="text" />
+              </md-input-container>
+              <div class="row" style="padding:16px; background: #c9e0ff;">
+                <div class="upload-btn-wrapper col-md-4">
+                  <div class="row">
+                    <button class="btn btn--contained-dark ripple" ripple="ripple">Ảnh thu nhỏ <br><i style="font-style: italic; text-transform: none;">(Thumbnail)</i>
+                      <div class="ripple__ink"></div>
+                    </button>
+                    <input type="file" name="file" id="file" onchange="anhdaidien();">
+                  </div>
+                  <div class="row" style="margin-top: 10px;">
+                    <img id="anhavt" width="50%" height="50%" src="images/loadingimage.png" style="border-radius: 5px; border: 3px solid white;">
+                  </div>
+                </div>
+                <div class="col-md-8" style="padding-left: 0px; position: unset;;">
+                  <span id="label"> Tác giả</span> <input type="text" name="tacgia" id="tacgia">
+                  <form> <%for(var l=0;l< loaitintuc.length; l++) {%> <div class="myradio">
+                      <input type="radio" name="loaitintuc" id="loaitt<%=loaitintuc[l]['loaitintuc_id']%>" value="<%=loaitintuc[l]['loaitintuc_id']%>" class="myradio__input">
+                      <label for="loaitt<%=loaitintuc[l]['loaitintuc_id']%>" class="myradio__label"><%=loaitintuc[l]['tenloai']%></label>
+                    </div> <%}%>
+                  </form>
+                  <button class="btn btn--contained-link ripple cd-popup-trigger" id="tintuc" name="tintuc" onclick="baiviettintuc();" ripple="ripple">Lưu bài viết<div class="ripple__ink"></div></button>
+                </div>
+              </div>
+            </div>
+        </md-content>
+        <!-- popup alert-->
+        <div class="cd-popup" role="alert">
+          <div class="cd-popup-container">
+            <p id="thongbao" style="color:red;"></p>
+            <!--<ul class="cd-buttons">
+                  <li><a href="#0">Yes</a></li>
+                  <li><a href="#0">No</a></li>
+                </ul> -->
+            <a href="#0" class="cd-popup-close img-replace">Close</a>
+          </div> <!-- cd-popup-container -->
+        </div> <!-- cd-popup -->
+      </div>
+    </div>
+    <!-- End of Content Wrapper -->
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" href="login.html">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="new/admin/vendor/jquery/jquery.min.js"></script>
+  <script src="new/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="new/admin/js/sb-admin-2.min.js"></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js'></script>
+  <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/svg-assets-cache.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.5.6/angular-sanitize.min.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.js'></script>
+  <script src='https://cdn.ckeditor.com/4.7.0/full/ckeditor.js'></script>
+  <script src="handel/check.js"></script>
+  <script src="/new/js/scriptBtn.js"></script>
+  <script>
+  </script>
+  <script src="script.js"></script>
+  <!-- Core plugin JavaScript-->
+</body>
+
+</html>

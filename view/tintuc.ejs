@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="img/fav.png">
+    <!-- Author Meta -->
+    <meta name="author" content="CodePixar">
+    <!-- Meta Description -->
+    <meta name="description" content="">
+    <!-- Meta Keyword -->
+    <meta name="keywords" content="">
+    <!-- meta character set -->
+    <meta charset="UTF-8">
+    <!-- Site Title -->
+    <title>Karma Shop</title>
+
+    <link rel="stylesheet" type="text/css" href="../new/styles/menu.css">
+    <!-- Colors CSS -->
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="../css/responsive.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../new/css/custom.css">
+
+    <link rel="stylesheet" href="../new/css/slick.css">
+    <link rel="stylesheet" href="../new/css/qt_ck.css">
+
+    <!-- Modernizer for Portfolio -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="socket.io/socket.io.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../new/styles/bootstrap4/bootstrap.min.css">
+    <link href="../new/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="../new/plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+    <link rel="stylesheet" type="text/css" href="../new/plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+    <link rel="stylesheet" type="text/css" href="../new/plugins/OwlCarousel2-2.2.1/animate.css">
+    <link rel="stylesheet" type="text/css" href="../new/styles/main_styles.css">
+    <link rel="stylesheet" type="text/css" href="../new/styles/responsive.css">
+    <link rel="stylesheet" href="../new/css/bootstrap.min.css">
+    <script>
+        $(document).ready(function () {
+            $("#tt").addClass("active");
+        })
+    </script>
+    <style>
+        .header_nav_container {
+            margin: 0px;
+        }
+    </style>
+    <script>
+        var socket = io("http://103.81.86.79:8080");
+        $(document).ready(function () {
+            socket.emit("menuchuyenkhoa");
+            socket.on("returnmenu", function (data) {
+                for (var u = 0; u < data.length; u++) {
+                    $("#menuck").append('<a href="/chuyenkhoa/' + data[u]['chuyenkhoa_id'] + '"><li  >' + data[u]['tenchuyenkhoa'] + '</li></a>');
+                }
+            })
+        })
+    </script>
+</head>
+
+<body>
+    <% include element/header_user.ejs %>
+    <div id='fb-root'></div>
+    <script>
+            (function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                js = d.createElement(s); js.id = id;
+                js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js#xfbml=1&version=v2.12&autoLogAppEvents=1';
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+    </script>
+    <div class='fb-customerchat' attribution="wordpress" page_id='101825754529943'
+        logged_in_greeting='Chào bạn bạn cần tôi giúp gì?' logged_out_greeting='Chào bạn bạn cần tôi giúp gì?'>
+    </div>
+    <div class="single-product-slider" style="margin-top: 150px;">
+        <div class="container">
+            <section id="sliderSection">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8 col-sm-8">
+                        <div class="slick_slider">
+                            <%for(var j =0;j < slide.length;j++) { %>
+                            <div class="single_iteam">
+                                <a href="/noidung/<%= slide[j]['tintuc_id'] %>">
+                                    <img src="../hinhanh/baiviet/<%= slide[j]['hinhanh'] %>" alt="">
+                                </a>
+                                <div class="slider_article">
+                                    <h2><a class="slider_tittle" href="/noidung/<%= slide[j]['tintuc_id'] %>">
+                                            <%= slide[j]['tieude'] %></a>
+                                    </h2>
+                                </div>
+                            </div>
+                            <% }  %>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="latest_post">
+                            <div class="latest_post_container">
+                                <h4
+                                    style="background: linear-gradient(to right, #367bff 0%, #28bdf8 100%); border-radius: 16px; padding: 15px; font-weight: bold; color: white; box-shadow: 0 9px 37px -8px rgba(40, 189, 248, 2.4);">
+                                    Tin khác</h4>
+                                <div id="prev-button"><i class="fa fa-chevron-up"></i></div>
+                                <ul class="latest_postnav">
+                                    <%for(var o =0 ; o < random.length;o++) { %>
+                                    <li>
+                                        <div class="media"> <a href="/noidung/<%=random[o]['tintuc_id']%>" class="media-left">
+                                                <img alt="" src="../hinhanh/baiviet/<%= random[o]['hinhanh'] %>"> </a>
+                                            <div class="media-body"> <a href="/noidung/<%=random[o]['tintuc_id']%>"
+                                                    class="catg_title"><%= random[o]['tieude'] %> </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <% } %>
+                                </ul>
+                                <div id="next-button"><i class="fa  fa-chevron-down"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="row" style="float: left;">
+                <div class="info">
+                    <h3><strong>Tin tức</strong></h3>
+                    <hr style="border-top: 1px solid #8c8b8b;">
+                    <div class="container">
+                        <div class="row row-eq-height">
+                            <!-- Info Box -->
+                            <% for(var i = 0; i < thu.length;i++) { %>
+                            <div class="col-lg-3 col-md-3 col-sm-3">
+                                <a href="/noidung/<%=thu[i]['tintuc_id']%>">
+                                    <div class="info_box">
+                                        <div class="info_image"><img src="../hinhanh/baiviet/<%= thu[i]['hinhanh'] %>">
+                                        </div>
+                                        <div class="info_content">
+                                            <div class="info_title"><%= thu[i]['tieude'] %></div>
+                                            <div class="info_text" id="shownd"></div>
+                                            <div class="button info_button"><a href="/noidung/<%=thu[i]['tintuc_id']%>"><span>read more</span><span>read
+                                                        more</span></a></div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- start footer Area -->
+    <%include element/footer.ejs%>
+    <script src="../new/js/bootstrap.min.js"></script>
+    <script src="../new/js/slick.min.js"></script>
+    <script src="../new/js/jquery.newsTicker.min.js"></script>
+    <script src="../new/js/customs.js"></script>
+    <script src="../new/js/custom.js"></script>
+</body>
+
+</html>

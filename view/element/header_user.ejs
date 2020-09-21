@@ -1,0 +1,121 @@
+<header class="header" id="header">
+    <div class="menu trans_500">
+        <div class="menu_content d-flex flex-column align-items-center justify-content-center text-center">
+            <div class="menu_close_container">
+                <div class="menu_close"></div>
+            </div>
+            <form action="#" class="menu_search_form">
+                <input type="text" class="menu_search_input" placeholder="Search" required="required">
+                <button class="menu_search_button"><i class="fa fa-search" aria-hidden="true"></i></button>
+            </form>
+            <ul class="menuMB">
+                <li class="active menu-item"><a href="/" style="text-decoration: none;">Trang Chủ</a></li>
+                <li class="dropdown nav-item dropdown menu-item">
+                    <a style="color: #ffffff;"class="dropdown-toggle" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Về chúng tôi </a>
+                    <div class="dropdown-menu" id="mndrop" aria-labelledby="navbarDropdownMenuLink" style="margin: 0;">
+                        <a class="dropdown-item" href="/gioithieu" >Giới thiệu</a><br>
+                        <a class="dropdown-item" href="/trangthietbi" >Trang thiết bị</a><br>
+                        <a class="dropdown-item" href="/bacsi" >Đội ngũ bác sĩ</a><br>
+                        <a class="dropdown-item" href="/quytrinh" >Quy trình</a><br>
+                        
+                    </div>
+                </li>
+                <li class="dropdown nav-item dropdown menu-item">
+                    <a style="color: #ffffff;"class=" dropdown-toggle" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Chuyên khoa </a>
+                    <div class="dropdown-menu" id="mndrop" aria-labelledby="navbarDropdownMenuLink" style="margin: 0;"> <%for(var i =0; i < menu.length; i ++ )
+                                    {
+                                        %> <a class="dropdown-item" href="/chuyenkhoa/<%=menu[i]['chuyenkhoa_id']%>" class="dropdown-item"><%=menu[i]['tenchuyenkhoa']%></a> <%
+                                  }%> </div>
+                </li>
+                <li class="dropdown nav-item dropdown menu-item">
+                    <a style="color: #ffffff;"class=" dropdown-toggle" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Tin tức </a>
+                    <div class="dropdown-menu" id="mndrop" aria-labelledby="navbarDropdownMenuLink" style="margin: 0;">
+                        <a class="dropdown-item" href="/tintuc/1" >Tin phòng khám</a><br>
+                        <a class="dropdown-item" href="/tintuc/2" >Tin y tế</a><br>
+                    </div>
+                </li>
+                <li class="menu-item"><a href="/tuyendung" style="text-decoration: none;">Tuyển dụng</a></li><br>
+                <li class="menu-item"><a href="/lienhe" style="text-decoration: none;">Liên hệ</a></li><br>
+            </ul>
+        </div>
+    </div>
+    <div>
+        <div class="header_top">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="header_top_content d-flex flex-row align-items-center justify-content-start">
+                            <div class="logo">
+                                <img src="../new/images/logo.jpg" style="height:40px ; width: auto; ">
+                                <a>Phòng Khám Đa Khoa 105</a>
+                            </div>
+                            <div class="header_top_extra d-flex flex-row align-items-center justify-content-start ml-auto"></div>
+                            <div class="header_top_nav">
+                                <ul class="header_top_phone d-flex flex-row align-items-center justify-content-start">                          
+                                    <li><i class="fa fa-map-marker"></i> <span>105/4A Lê Văn Khương, P. Hiệp thành, Q.12</span></li>
+                                </ul>
+                            </div>
+                            <div class="header_top_phone">
+                                <ul class="d-flex flex-row align-items-center justify-content-start">
+                                    <i class="fa fa-phone" aria-hidden="true"></i>
+                                    <span>(028) 3717 7726 - 3717 7725</span>
+                            </div>
+                        </div>
+                        <div class="hamburger ml-auto"><i class="fa fa-bars" aria-hidden="true" style="padding-top: 15px; font-size: 30px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="header_nav" id="header_nav_pin">
+        <div class="header_nav_inner" style="display: grid;">
+            <div class="header_nav_container">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="header_nav_content d-flex flex-row align-items-center justify-content-start">
+                                <nav class="main_nav">
+                                    <ul class="d-flex flex-row align-items-center justify-content-start" style="margin-bottom: 0px;">
+                                        <li id="tc"><a href="/" style="text-decoration: none;">Trang Chủ</a></li>
+                                        <li  id="vct" class="dropdown nav-item dropdown">
+                                            <a style="color: #ffffff;"class="dropdown-toggle" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Về chúng tôi </a>
+                                            <div class="dropdown-menu" id="mndrop" aria-labelledby="navbarDropdownMenuLink" style="margin: 0;">
+                                                <a  href="/gioithieu" class="dropdown-item">Giới thiệu</a>
+                                                <a href="/trangthietbi" class="dropdown-item">Trang thiết bị</a>
+                                                <a href="/bacsi">Đội ngũ bác sĩ</a>
+                                                <a href="/quytrinh">Quy trình</a>
+                                            </div>
+                                        </li>
+                                        <li id="ck" class="dropdown nav-item dropdown">
+                                            <a style="color: #ffffff;"class=" dropdown-toggle" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Chuyên khoa </a>
+                                            <div class="dropdown-menu" id="mndrop" aria-labelledby="navbarDropdownMenuLink" style="margin: 0;"> <%for(var i =0; i < menu.length; i ++ )
+                                                    {
+                                                        %> <a href="/chuyenkhoa/<%=menu[i]['chuyenkhoa_id']%>" class="dropdown-item"><%=menu[i]['tenchuyenkhoa']%></a> <%
+                                                  }%> </div>
+                                        </li>
+                                        <li id="tt" class="dropdown nav-item dropdown">
+                                            <a style="color: #ffffff;"class=" dropdown-toggle" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Tin tức </a>
+                                            <div class="dropdown-menu" id="mndrop" aria-labelledby="navbarDropdownMenuLink" style="margin: 0;">
+                                                <a href="/tintuc/1" class="dropdown-item">Tin phòng khám</a>
+                                                <a href="/tintuc/2" class="dropdown-item">Tin y tế</a>
+                                            </div>
+                                        </li>
+                                        <li id="td"><a href="/tuyendung" style="text-decoration: none;">Tuyển dụng</a></li>
+                                        <li id="lh"><a href="/lienhe" style="text-decoration: none;">Liên hệ</a></li>
+                                    </ul>
+                                </nav>
+                                <div class="search_content d-flex flex-row align-items-center justify-content-end ml-auto">
+                                    <form action="/search" id="search_container_form" class="search_container_form" method="GET">
+                                        <input type="text" id="noidungtimkiem" name="noidungtimkiem" class="search_container_input" placeholder="Search" required="required" >
+                                        <button class="search_container_button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

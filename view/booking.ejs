@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Đặt lịch khám online</title>
+	<link rel="stylesheet" type="text/css"
+		href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+	<link rel='stylesheet' href='https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css'>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+	<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+	<link rel="stylesheet" href="./style.css">
+	<link rel="stylesheet" href="./calendar.css">
+
+	<style>
+		body {
+			background: #0083B0;
+			background: -webkit-linear-gradient(to right, #00B4DB, #0083B0);
+			background: linear-gradient(to right, #00B4DB, #0083B0);
+			background-repeat: no-repeat;
+			background-size: cover;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+			font-family: 'Ubuntu', sans-serif;
+			height: 100vh;
+			margin: -20px 0 50px;
+		}
+
+		#captain {
+			padding: 0px 100px;
+		}
+
+		@media only screen and (max-width: 991px) {
+			#captain {
+				padding: 0px 10px;
+			}
+		}
+	</style>
+
+</head>
+
+<body>
+	<!-- partial:index.partial.html -->
+	<div class="image-container set-full-height" style="padding-top: 20px;">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-8 col-sm-offset-2">
+					<!-- Wizard container -->
+					<div class="wizard-container">
+						<div class="card wizard-card" data-color="red" id="wizard">
+							<form action="/formdatlichkham" method="POST" id="datlichkham">
+								<div class="wizard-header">
+									<h3 class="wizard-title">Đặt lịch khám bệnh</h3>
+									<h5>Chúng tôi sẽ liên hệ cho bạn về thời gian phù hợp.</h5>
+								</div>
+								<div class="wizard-navigation">
+									<ul>
+										<li><a href="#details" data-toggle="tab" class="disabled-g">Thông tin cá
+												nhân</a></li>
+										<li><a href="#captain" data-toggle="tab" class="disabled-g">Thời gian</a></li>
+										<li><a id="xacnhan" href="" data-toggle="tab" class="disabled-g">Xác nhận</a>
+										</li>
+									</ul>
+								</div>
+								<div class="tab-content">
+									<div class="tab-pane" id="details">
+										<div class="row">
+											<div class="col-sm-12">
+												<h4 class="info-text">Bắt đầu bằng cách điền thông tin để chúng tôi tiện
+													liên hệ với bạn</h4>
+											</div>
+											<div class="col-sm-12">
+												<div class="input-group">
+													<span class="input-group-addon">
+														<i class="material-icons">label</i>
+													</span>
+													<div class="form-group label-floating">
+														<label class="control-label">Họ và tên</label>
+														<input name="name" type="name" class="form-control"
+															id="txt-name">
+														<label class="error" id="err_name"></label>
+													</div>
+												</div>
+												<div class="input-group">
+													<span class="input-group-addon">
+														<i class="material-icons">room</i>
+													</span>
+													<div class="form-group label-floating">
+														<label class="control-label">Địa chỉ</label>
+														<input name="address" type="address" class="form-control"
+															id="txt-address">
+													</div>
+												</div>
+												<div class="input-group">
+													<span class="input-group-addon">
+														<i class="material-icons">email</i>
+													</span>
+													<div class="form-group label-floating">
+														<label class="control-label">Your Email</label>
+														<input name="email" type="email" class="form-control"
+															id="txt-email">
+													</div>
+												</div>
+												<div class="input-group">
+													<span class="input-group-addon">
+														<i class="material-icons">phone</i>
+													</span>
+													<div class="form-group label-floating">
+														<label class="control-label">Số điện thoại</label>
+														<input name="phone" type="phone" class="form-control"
+															id="txt-phone">
+													</div>
+												</div>
+												<div class="input-group">
+													<div class="form-group label-floating">
+														<p class="error" id="error_label"
+															style="padding-left: 54px; color: red; font-style: italic; ">
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="tab-pane" id="captain">
+										<h4 class="info-text" style="margin: 0px; padding: 0px;">Chọn khoảng thời gian
+											mong muốn của bạn? </h4>
+										<h5><i style="color: red; font-style: italic; " id="loi"> </i></h5>
+										<div class="row">
+											<div class="col-sm-12">
+												<div class="form-group label-floating" style="margin: 0px;">
+													<select class="form-control required" id="timelist">
+														<option disabled="" selected="">Chọn giờ</option>
+														<option value="7:00"> 7:00</option>
+														<option value="7:30"> 7:30</option>
+														<option value="8:00"> 8:00</option>
+														<option value="8:30"> 8:30</option>
+														<option value="9:00"> 9:00 </option>
+														<option value="9:30"> 9:30 </option>
+														<option value="10:00"> 10:00 </option>
+														<option value="10:30"> 10:30 </option>
+														<option value="11:00"> 11:00 </option>
+														<option value="13:30"> 13:30 </option>
+														<option value="14:00"> 14:00 </option>
+														<option value="14:30"> 14:30</option>
+														<option value="15:00"> 15:00 </option>
+														<option value="15:30"> 15:30</option>
+														<option value="16:00"> 16:00 </option>
+														<option value="16:30"> 16:30 </option>
+														<option value="17:00"> 17:00 </option>
+														<option value="17:30"> 17:30 </option>
+														<option value="18:00"> 18:00 </option>
+														<option value="18:30"> 18:30</option>
+														<option value="19:00"> 19:00 </option>
+														<option value="19:30"> 19:30</option>
+														<option value="20:00"> 20:00 </option>
+														<option value="20:30"> 20:30</option>
+													</select>
+												</div>
+											</div>
+											<div class="col-sm-12">
+												<div id="calendar">
+													<div id="calendar_header"><i class="icon-chevron-left"></i>
+														<h1 id="monthTemp"></h1><i class="icon-chevron-right"></i>
+													</div>
+													<div id="calendar_weekdays"></div>
+													<div id="calendar_content"></div>
+												</div>
+											</div>
+										</div>
+										<input type="hidden" id="dateTemp">
+										<i>Chúng tôi không chắc chắn rằng thời gian khám trực tiếp sẻ chính xác nhưng
+											bệnh viện sẻ sắp xếp phù hợp nhất với nhu cầu của bạn.</i>
+									</div>
+									<div class="tab-pane" id="description">
+										<div class="row">
+											<h4 class="info-text"> Xác nhận thông tin đặt lịch khám.</h4>
+											<div class="col-sm-6" style="padding-left: 50px;">
+												<div class="form-group">
+													<label>Họ và tên</label>
+													<p id="namePer" name="namePer"></p>
+												</div>
+												<div class="form-group">
+													<label>Địa chỉ</label>
+													<p id="addressPer" name="addressPer"></p>
+												</div>
+												<div class="form-group">
+													<label>Email</label>
+													<p id="emailPer" name="emailPer"></p>
+												</div>
+												<div class="form-group">
+													<label>Số điện thoại</label>
+													<p id="phonePer" name="phonePer"></p>
+
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<div class="form-group">
+													<label>Thời gian đặt lịch</label>
+													<p id="timeBooking" name="timeBooking"></p>
+													<input type="hidden" id="tg" name="tg">
+												</div>
+												<div class="form-group">
+													<label>Mô tả bệnh tình hiện tại (nếu có)</label>
+													<textarea class="form-control" placeholder="" id="mota" name="mota"
+														rows="6"></textarea>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="wizard-footer">
+									<div class="pull-right">
+										<input type='button' class='btn btn-next btn-fill btn-danger btn-wd' name='next'
+											value='Tiếp' id="btnFinish" />
+										<input type='button' class='btn btn-finish btn-fill btn-danger btn-wd'
+											name='finish' id="finish" value='Hoàn thành' />
+									</div>
+									<div class="pull-left">
+										<input type='button' class='btn btn-previous btn-fill btn-default btn-wd'
+											name='previous' value='Trở lại' />
+									</div>
+									<div class="clearfix"></div>
+								</div>
+							</form>
+						</div>
+					</div> <!-- wizard container -->
+				</div>
+			</div> <!-- row -->
+		</div> <!--  big container -->
+	</div>
+	<!-- partial -->
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js'></script>
+	<script src="./check.js"></script>
+	<script src="./script.js"></script>
+	<script src="./calendar.js"></script>
+	<script src="../socket.io/socket.io.js"></script>
+	<script>
+		var socket = io("http://18.212.196.9:8080");
+		$(document).ready(function () {
+
+			$("#xacnhan").attr("href", "#description");
+			$("#dateTemp").val(new Date().getDate());
+
+			$("#calendar").on("click", ".date", function () {
+				$('.date').removeClass('active');
+				$(this).addClass('active');
+				$("#dateTemp").val($(this).text());
+			});
+			$("#finish").click(function () {
+				var name = $("#namePer").text();
+				var address = $("#addressPer").text();
+				var email = $("#emailPer").text();
+				var phone = $("#phonePer").text();
+				var tg = $("#tg").val();
+				var mota = $("#mota").val();
+				socket.emit("luulichkham", name, address, email, phone, tg, mota);
+			})
+			$('#btnFinish').click(function () {
+				if ($("#timelist").val() != null) {
+
+					$('#namePer').text($('#txt-name').val());
+					$('#addressPer').text($('#txt-address').val());
+					$('#emailPer').text($('#txt-email').val());
+					$('#phonePer').text($('#txt-phone').val());
+
+					var string = $('#monthTemp').text();
+					var year = string.slice(0, 4);
+					var month = string.slice(5, 7)
+					var day = $('#dateTemp').val();
+					var han1 = new Date()
+					var aa = han1.getHours();
+
+					var bookdate = new Date(year, month, day);
+					var bookdates = new Date(bookdate)
+
+					var nowyear = han1.getFullYear() + 1;
+					var nowmonth = han1.getMonth();
+					var nowday = han1.getDate();
+					var nowdate = new Date(nowyear, nowmonth, nowday);
+					var nowdates = new Date(nowdate)
+					var kq = bookdates - nowdates + 28944000000;
+
+					$('#timeBooking').text($("#timelist :selected").val() + " " + $('#monthTemp').text() + "/" + $('#dateTemp').val());
+
+					$('#tg').val($("#timelist :selected").val() + " " + $('#monthTemp').text() + "/" + $('#dateTemp').val());
+					if (kq > 86400000 * 60) {
+						$("#xacnhan").attr("data-toggle", "");
+						$("#loi").text("Chỉ được đặt trước tối đa 60")
+					}
+					else if (kq <= 0) {
+						$("#xacnhan").attr("data-toggle", "");
+						$("#loi").text("Ngày đặt phải lớn hơn ngày hiện tại!")
+					} else {
+						socket.emit("kiemtralichtrung", $("#tg").val())
+						socket.on("thongbaolichtrung", function () {
+							$("#xacnhan").attr("data-toggle", "");
+							$("#loi").text("Lịch bị trùng, vui lòng chọn giờ khác")
+						})
+						socket.on("thongbaolichkhongtrung", function () {
+							$("#xacnhan").attr("data-toggle", "tab");
+							$("#loi").text("")
+						})
+					}
+				}
+
+
+
+			});
+		});
+		socket.on("thongbaodatlichtc", function () {
+			window.location.href = "/thongbaothanhcong";
+		})
+		socket.on("thongbaodatlichtb", function () {
+			window.location.href = "/thongbaokhongthanhcong";
+		})
+
+	</script>
+	<script>
+
+	</script>
+</body>
+
+</html>

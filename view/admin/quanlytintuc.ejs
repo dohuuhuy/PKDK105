@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>SB Admin 2 - Dashboard</title>
+  <!-- Custom fonts for this template-->
+  <link href="../../new/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <!-- Custom styles for this template-->
+  <link rel="stylesheet" href="../../new/admin/css/sb-admin-2.min.css">
+  <link rel="stylesheet" href="../../new/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../new/css/style.css">
+  <link rel="stylesheet" href="../../new/css/custom.css">
+  <link rel="stylesheet" href="../../new/css/custom2.css">
+  <link rel="stylesheet" href="../../new/css/styleBtn.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="../../new/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function filterloaitintuc() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("loaitintuc");
+
+      filter = input.value.toUpperCase();
+
+      table = document.getElementById("myTable");
+      var tbody = table.getElementsByTagName("tbody")[0];
+      tr = tbody.getElementsByTagName("tr");
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[4];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase() == filter) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+    var a = [];
+    $(document).ready(function () {
+      $("#menuBV").addClass("active");
+      var checkboxes = $("input[type='checkbox']")
+
+      checkboxes.click(function () {
+        v = $(this).is(":checked");
+        if (v == true) {
+          a.push($(this).val())
+        }
+        else {
+          var index = a.indexOf($(this).val());
+          if (index > -1) {
+            a.splice(index, 1);
+          }
+        }
+      });
+    });
+    $(document).ready(function () {
+      $("#xoa").click(function () {
+        $("#a").val(a);
+        $("#xoatintuc").submit();
+      })
+    })
+  </script>
+</head>
+
+<body id="page-top" style="min-width: 1000px;">
+  <div id="wrapper"> <% include ../element/header_admin.ejs %> <div id="content-wrapper" class="d-flex flex-column">
+      <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style="display: block; padding-top: 20px;">
+        <!-- Sidebar Toggle (Topbar) -->
+        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+          <i class="fa fa-bars"></i>
+        </button>
+        <span style=" text-align: center; color:#4e73df; font-weight: bold ; font-size: 20px;">QUẢN LÝ TIN TỨC</span>
+      </nav>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <select id="loaitintuc" onchange="filterloaitintuc()" class="customCombobox"> <%if(loaitintuc!="")
+              {
+                for(var k=0; k < loaitintuc.length ; k++)
+                {
+                  %> <option value="<%=loaitintuc[k]['tenloai']%>"><%=loaitintuc[k]['tenloai']%></option> <%
+                }
+              }%> </select>
+          </div>
+          <div class="col-12">
+            <div style="position: unset;">
+              <div class="customTable">
+                <table class="table table-image" id="myTable">
+                  <thead>
+                    <tr>
+                      <th scope="col">STT</th>
+                      <th scope="col">Thumbnail</th>
+                      <th scope="col">Tiêu đề</th>
+                      <th scope="col" class="title">Ngày đăng</th>
+                      <th scope="col">Loại tin tức</th>
+                      <th scope="col">Sửa</th>
+                      <form action="/xoatintuc" id="xoatintuc" method="POST">
+                        <input type="hidden" value="" id="a" name="a">
+                        <th scope="col"><input type="button" id="xoa" value="Xóa"></th>
+                      </form>
+                    </tr>
+                  </thead>
+                  <tbody> <% if(kq.length!=0){ for(var i=0;i< kq.length; i++) {  %> <% var d = new Date(kq[i]['ngaydang']); %> <% d = new Date(d.getTime() - 3000000); %> <% var date_format_str = d.getFullYear().toString()+"-"+((d.getMonth()+1).toString().length==2?(d.getMonth()+1).toString():"0"+(d.getMonth()+1).toString())+"-"+(d.getDate().toString().length==2?d.getDate().toString():"0"+d.getDate().toString())+" "+(d.getHours().toString().length==2?d.getHours().toString():"0"+d.getHours().toString())+":"+((parseInt(d.getMinutes()/5)*5).toString().length==2?(parseInt(d.getMinutes()/5)*5).toString():"0"+(parseInt(d.getMinutes()/5)*5).toString())+":00"; %> <tr class="box-object">
+                      <td class="stt"><%=i+1%></td>
+                      <td class="image">
+                        <img src="../../hinhanh/baiviet/<%=kq[i]['hinhanh']%>" class="img-fluid img-thumbnail" alt="Sheep">
+                      </td>
+                      <td class="tieude"><%=kq[i]['tieude']%></td>
+                      <td class="ngaydang"><%=date_format_str%></td>
+                      <td class="tenloai"><%=kq[i]['tenloai']%></td>
+                      <td class="edit"><a href="/admin/dieuchinhtintuc/<%=kq[i]['tintuc_id']%>"><i class="fas fa-pen-square"></i></a></td>
+                      <td class="del">
+                        <input type="checkbox" value="<%=kq[i]['tintuc_id']%>" id="<%=kq[i]['tintuc_id']%>">
+                        <label for="<%=kq[i]['tintuc_id']%>"></label>
+                      </td>
+                    </tr> <% } }%> </tbody>
+                </table>
+              </div> <% var min = pageIndex - 2 %> <% var max = pageIndex + 1 %> <% if(max >= page){ %> <% max = page %> <% }%> <div class="navigation-page">
+                <div class="box-navi"> <% if(pageIndex > 1){ %> <a href="/admin/quanlytintuc/<%=pageIndex - 1%>" class="num-page" style="text-decoration: none;"><i class="fas fa-angle-left"></i></a> <% } %> <% if(page < 3){ %>
+                  <!--Tổng trang < 5--> <% for(var j = 0 ; j < page ; j++){ %> <% if( j == pageIndex - 1){ %> <a href="/admin/quanlytintuc/<%=j+1%>" class="num-page active" style="text-decoration: none;"><%=j+1%></a> <% } else { %> <a href="/admin/quanlytintuc/<%=j+1%>" class="num-page" style="text-decoration: none;"><%=j+1%></a> <% } %> <% } %> <% } else{ %> <% if(pageIndex < 3){ %> <% for(var j = 0 ; j < max ; j++){ %> <% if( j === pageIndex - 1){ %> <a href="/admin/quanlytintuc/<%=j+1%>" class="num-page active" style="text-decoration: none;"><%=j+1%></a> <% } else { %> <a href="/admin/quanlytintuc/<%=j+1%>" class="num-page" style="text-decoration: none;"><%=j+1%></a> <% } %> <% } %> <% }else{ %> <% for(var j = min ; j < max ; j++){ %> <% if( j == pageIndex - 1){ %> <a href="/admin/quanlytintuc/<%=j+1%>" class="num-page active" style="text-decoration: none;"><%=j+1%></a> <% } else { %> <a href="/admin/quanlytintuc/<%=j+1%>" class="num-page" style="text-decoration: none;"><%=j+1%></a> <% } %> <% } %> <% } %> <% } %> <% if(pageIndex < page){ %> <a href="/admin/quanlytintuc/<%=pageIndex + 1%>" class="num-page" style="text-decoration: none;"><i class="fas fa-angle-right"></i></a> <% } %> </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="../../new/admin/js/sb-admin-2.min.js"></script>
+</body>
+
+</html>

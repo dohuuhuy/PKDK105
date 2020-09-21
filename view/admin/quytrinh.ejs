@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>SB Admin 2 - Dashboard</title>
+  <!-- Custom styles for this template-->
+  <link rel='stylesheet' href='https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.css'>
+  <link href="../../new/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="../../new/admin/css/sb-admin-2.min.css">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../newstyle.css">
+  <link rel="stylesheet" href="../../new/css/custom2.css">
+  <link rel="stylesheet" href="../../new/css/styleBtn.css">
+  <link rel="stylesheet" href="../../new/css/inputStyle.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="socket.io/socket.io.js"></script>
+  <script>
+    $(window).scroll(function () {
+      var top = 200;
+      if ($(window).scrollTop() >= top) {
+        $("#navbarMain").css("position", "fixed");
+        $("#navbarMain").css("top", "0");
+        $("#navbarMain").css("z-index", "1000");
+      } else {
+        $("#navbarMain").css("position", "");
+        $("#navbarMain").css("top", "");
+        $("#navbarMain").css("z-index", "");
+      }
+    });
+  </script>
+  <script>
+    var socket = io("http://103.81.86.79:8080");
+    //XU LY DICH VU
+    function modelhinhdv() {
+      var selector = document.getElementById("themhinhdv");
+      var img = document.getElementById("showmodeldv");
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var loai = selector.files[0].type;
+        if (loai == "image/jpeg" || loai == "image/png") {
+          img.src = e.target.result;
+          document.getElementById("loidv").innerHTML = ""
+          $("#chenhinhdv").click(function () {
+            var tenhinh = selector.files[0].name;
+            var tenluu = Date.now() + '-' + tenhinh;
+            socket.emit("themhinhtt", { base64: e.target.result }, tenluu);
+            // var fil = document.getElementById("themhinh").value;
+            //  var filename = fil.replace(/^.*?([^\\\/]*)$/, '$1')
+            setTimeout(function () {
+              var editor = CKEDITOR.instances.content1;
+              var link = '../../hinhanh/baiviet/';
+              var value = '<p><img width="70%" height="70%"  class="img-fluid" src="' + link + tenluu + '"/></p>'
+              if (editor.mode == 'wysiwyg') {
+                var imgHtml = CKEDITOR.dom.element.createFromHtml(value);
+                editor.insertElement(imgHtml);
+                //Event for load image in edit text
+                $('#myModal1').modal('hide');
+                $('#themhinhdv').val('');
+                $("#showmodeldv").attr("src", "");
+                $('.modal-backdrop').remove();
+              } else {
+                alert('You must be in WYSIWYG mode!');
+              }
+            }, 400);
+          })
+        }
+        else {
+          document.getElementById("loidv").innerHTML = "Bạn vui lòng chọn file ảnh"
+        }
+      }
+      reader.readAsDataURL(selector.files[0]);
+    }
+    //model - anh null
+    $(document).ready(function () {
+      $("#menuDCT").addClass("active");
+      $("#chenhinhdv").click(function () {
+        var tenhinh = $("#themhinhdv").val();
+        if (tenhinh == "") {
+          document.getElementById("loidv").innerHTML = "Mời bạn chọn ảnh"
+        }
+      })
+    })   
+  </script>
+  <script>
+    //THONG BAO
+    jQuery(document).ready(function ($) {
+      //open popup
+
+      //close popup
+      $('.cd-popup').on('click', function (event) {
+        if ($(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup')) {
+          event.preventDefault();
+          $(this).removeClass('is-visible');
+        }
+      });
+      //close popup when clicking the esc keyboard button
+      $(document).keyup(function (event) {
+        if (event.which == '27') {
+          $('.cd-popup').removeClass('is-visible');
+        }
+      });
+    });
+  </script>
+</head>
+
+<body id="page-top">
+  <!-- Page Wrapper -->
+  <div id="wrapper"> <% include ../element/header_admin.ejs %>
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <!-- Main Content -->
+      <div>
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+          <span style=" text-align: center; color:#007EA7; font-weight: bold ; font-size: 24px;">CẬP NHẬT QUY TRÌNH KHÁM BỆNH</span>
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+        </nav>
+      </div>
+      <div class=" container-fluid form-style-1">
+        <div ng-controller="DemoCtrl as vm" layout="column" ng-cloak="" ng-app="app">
+          <md-content class="box-content">
+            <!--FORM TUYEN DUNG-->
+            <!--FORM QUY TRỈNH KHAM BENH -->
+            <div id="dichvu">
+              <form method="post" action="/capnhatdv" id="formform" style="padding: 50px; ">
+                <div id="wp-content-media-buttons" class="wp-media-buttons">
+                  <button type="button" class="btn btn--contained-success ripple" ripple="ripple" data-toggle="modal" data-target="#myModal1">Thêm ảnh<div class="ripple__ink"></div></button>
+                  <label id="error_customerName">
+                    <!-- The Modal -->
+                    <div class="modal modalCustom" id="myModal1">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <!-- Modal Header -->
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          </div>
+                          <!-- Modal body -->
+                          <div class="modal-body">
+                            <h4 class="titleModal">Thêm ảnh vào bài viết</h4>
+                            <input type="file" id="themhinhdv" name="themhinhdv" onchange="modelhinhdv();">
+                            <img src="" id="showmodeldv" width="40%" height="40%">
+                          </div>
+                          <!-- Modal footer -->
+                          <p id="loidv" style="text-transform: inherit;font-style: italic;color: red;font-size: 13px;font-weight: 400;"></p>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn--contained-info ripple" ripple="ripple" id="chenhinhdv">Xác nhận<div class="ripple__ink"></div></button>
+                            <button type="submit" class="btn btn--contained-default ripple" ripple="ripple" id="closemodalbs" data-dismiss="modal" onclick="document.getElementById('themhinhdv').value=''; document.getElementById('showmodeldv').src='' ">Hủy<div class="ripple__ink"></div></button>
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <md-input-container class="md-block">
+                  <textarea ck-editor ng-model="vm.content1" md-select-on-focus="" id="content1"><%=quytrinh[0]['noidung']%></textarea>
+                </md-input-container>
+                <md-input-container class="md-block" style="height: 0px; padding: 0px; margin: 0px;">
+                  <input ng-model="vm.content1" type="text" name="noidungdv" id="noidungdv" style="opacity: 0; width: 0px; height: 0px;" />
+                </md-input-container>
+                <button class="btn btn--contained-link ripple cd-popup-trigger" ripple="ripple" name="submitbs" id="capnhatdv" formaction="/capnhatdv" onclick="checkAuctionName();">Cập nhật<div class="ripple__ink"></div></button>
+                <div style="height: 50px;"></div>
+              </form>
+            </div>
+          </md-content>
+          <!-- popup alert-->
+          <div class="cd-popup" role="alert">
+            <div class="cd-popup-container">
+              <p id="thongbao" style="color:red;"></p>
+              <!--<ul class="cd-buttons">
+                  <li><a href="#0">Yes</a></li>
+                  <li><a href="#0">No</a></li>
+                </ul> -->
+              <a href="#0" class="cd-popup-close img-replace">Close</a>
+            </div> <!-- cd-popup-container -->
+          </div> <!-- cd-popup -->
+        </div>
+      </div>
+    </div>
+    <!-- End of Content Wrapper -->
+  </div>
+  <!-- End of Page Wrapper -->
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" href="login.html">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Bootstrap core JavaScript-->
+  <script src="new/admin/vendor/jquery/jquery.min.js"></script>
+  <script src="new/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="new/admin/js/sb-admin-2.min.js"></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js'></script>
+  <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/svg-assets-cache.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.5.6/angular-sanitize.min.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.js'></script>
+  <script src='https://cdn.ckeditor.com/4.7.0/full/ckeditor.js'></script>
+  <script src="handel/check.js"></script>
+  <script>
+  </script>
+  <script src="script.js"></script>
+  <!-- Core plugin JavaScript-->
+</body>
+
+</html>

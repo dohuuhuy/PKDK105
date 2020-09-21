@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>SB Admin 2 - Dashboard</title>
+    <!-- Custom fonts for this template-->
+    <link href="../../new/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template-->
+    <link rel="stylesheet" href="../../new/admin/css/sb-admin-2.min.css">
+    <link rel="stylesheet" href="../../new/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../new/css/style.css">
+    <link rel="stylesheet" href="../../new/css/custom2.css">
+    <link rel="stylesheet" href="../../new/css/styleBtn.css">
+    <link rel="stylesheet" href="../../new/css/inputStyle.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="../../new/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        //THONG BAO
+        jQuery(document).ready(function ($) {
+            //open popup
+
+            //close popup
+            $('.cd-popup').on('click', function (event) {
+                if ($(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup')) {
+                    event.preventDefault();
+                    $(this).removeClass('is-visible');
+                }
+            });
+            //close popup when clicking the esc keyboard button
+            $(document).keyup(function (event) {
+                if (event.which == '27') {
+                    $('.cd-popup').removeClass('is-visible');
+                }
+            });
+        });
+
+        $(document).ready(function(){
+            $("#menuTD").addClass("active");
+        });
+    </script>
+</head>
+
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper"> <% include ../element/header_admin.ejs %>
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content" style="flex: 0">
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <span style=" text-align: center; color:#007EA7; font-weight: bold ; font-size: 20px;">QUẢN LÝ TUYỂN DỤNG</span>
+                </nav>
+            </div>
+            <div class="container-fuild">
+                <div class="col-12">
+                    <a href="/themtuyendung"><input type="button" class="btn btn--contained-success ripple" ripple="ripple" value="Thêm"></a>
+                </div>
+                <div class="col-12">
+                    <div class="customTable">
+                        <table class="table table-image" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">STT</th>
+                                    <th scope="col">vị trí tuyển dụng</th>
+                                    <th scope="col">Yêu cầu tuyển dụng</th>
+                                    <th scope="col">Hồ sơ dự tuyển</th>
+                                    <th scope="col"> Sửa</th>
+                                    <th scope="col">Xóa</th>
+                                </tr>
+                            </thead>
+                            <tbody> <% if(nhomvt!=""){%> <%for(var i =0 ; i< nhomvt.length; i++){%> 
+                                <tr class="box-object">
+                                    <td class="stt"><%=i+1%></td>
+                                    <td class="chuyenkhoa">
+                                    <% if(vttd!="")
+                                    {
+                                    for(var j=0;j < vttd.length; j++) 
+                                    {
+                                     if(nhomvt[i]['nhomvitri_id']==vttd[j]['nhomvitri_id'])   
+                                     {
+                                         %>
+                                        <%=vttd[j]['tenvitri'] %> (<%=vttd[j]['soluong']%>)<br>
+                                         <%
+                                     }
+                                    }}%>
+                                </td>
+                                <td class="stt">
+                                    
+                                    <% if(yctd!="")
+                                    {
+                                        for(var l=0; l< yctd.length; l++)
+                                        {
+                                            if(nhomvt[i]['nhomvitri_id']==yctd[l]['nhomvitri_id'])   {
+                                            %>
+                                            <%=yctd[l]['tenyeucau']%> <br>
+                                            <%
+                                        }}
+                                    }  %>
+                                </td>
+                                <td class="stt">
+                                    
+                                        <% if(hstd!="")
+                                        {
+                                            for(var l=0; l< hstd.length; l++)
+                                            {
+                                                if(nhomvt[i]['nhomvitri_id']==hstd[l]['nhomvitri_id'])   {
+                                                %>
+                                                <%=hstd[l]['tenhoso']%> <br>
+                                                <%
+                                            }}
+                                        }  %>
+                                    </td>
+                                    <td class="edit"><a href="/admin/dieuchinhtuyendung/<%=nhomvt[i]['nhomvitri_id']%>" ><i class="fas fa-pen-square"></i></a></td>
+                                    <form action="/xoatuyendung/<%=nhomvt[i]['nhomvitri_id']%>" method="POST" id="formxoa">
+                                        <td><button type="submit" class="btnDelRow"><i class="fas fa-trash-alt"></i></button></td>
+                                    </form>
+                                </tr>
+                                <%}}%>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- popup alert-->
+    <div class="cd-popup" role="alert">
+        <div class="cd-popup-container">
+            <p id="thongbao" style="color:red;"></p>
+            <!--<ul class="cd-buttons">
+                  <li><a href="#0">Yes</a></li>
+                  <li><a href="#0">No</a></li>
+                </ul> -->
+            <a href="#0" class="cd-popup-close img-replace">Close</a>
+        </div> <!-- cd-popup-container -->
+    </div> <!-- cd-popup -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+    <!-- Bootstrap core JavaScript-->
+    <script src="../../new/admin/vendor/jquery/jquery.min.js"></script>
+    <script src="../../new/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../new/admin/js/sb-admin-2.min.js"></script>
+    <script src="../../handel/check.js"></script>
+    <script src="../../new/js/scriptBtn.js"></script>
+    <!-- Core plugin JavaScript-->
+</body>
+
+</html>

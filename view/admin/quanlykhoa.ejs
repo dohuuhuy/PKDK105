@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>SB Admin 2 - Dashboard</title>
+    <!-- Custom fonts for this template-->
+    <link href="../../new/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template-->
+    <link rel="stylesheet" href="../../new/admin/css/sb-admin-2.min.css">
+    <link rel="stylesheet" href="../../new/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../new/css/style.css">
+    <link rel="stylesheet" href="../../new/css/custom2.css">
+    <link rel="stylesheet" href="../../new/css/styleBtn.css">
+    <link rel="stylesheet" href="../../new/css/inputStyle.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="../../new/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#menuKhoa").addClass("active");
+            $("#formADD").hide();
+            $("#them").click(function () {
+                $("#formADD").show();
+            })
+            $("#btnCancelAdd").click(function () {
+                $("#formADD").hide();
+            })
+        })
+    </script>
+</head>
+
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper"> <% include ../element/header_admin.ejs %>
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content" style="flex: 0">
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <span style="text-align: center; color:#007EA7; font-weight: bold ; font-size: 20px;">QUẢN LÝ KHOA</span>
+                </nav>
+            </div>
+            <div class="container-fuild">
+                <div class="col-12" style="position: unset;">
+                    <button type="button" id="them" class="btn btn--contained-success ripple" ripple="ripple">Thêm</button></div>
+                <div class="col-12" style="position: unset;" id="formADD">
+                    <div class="customTable">
+                        <form method="POST" action="/themkhoa" id="themkhoa">
+                            <div class="text-input">
+                                <input id="username" type="text" name="tenchuyenkhoa" placeholder="Username" autocomplete="off" required />
+                                <label for="username">Tên chuyên khoa</label>
+                            </div>
+                            <button class="btn btn--contained-link ripple" ripple="ripple">Lưu</button>
+                            <a href="#" id="btnCancelAdd" class="btn btn--contained-bluer ripple" ripple="ripple">Hủy</a>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-12" style="position: unset;">
+                    <div class="customTable">
+                        <table class="table table-image" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">STT</th>
+                                    <th scope="col">Chuyên khoa</th>
+                                    <th scope="col"> Sửa</th>
+                                    <th scope="col">Xóa</th>
+                                </tr>
+                            </thead>
+                            <tbody> <% if (kq!=""){%> <% for(var i=0; i< kq.length; i++){ %> <tr class="box-object">
+                                    <td class="stt"><%=i+1%></td>
+                                    <form action="/dieuchinhkhoa/<%=kq[i]['chuyenkhoa_id']%>" method="POST">
+                                        <td class="chuyenkhoa"><input name="suachuyenkhoa" type="text" value="<%=kq[i]['tenchuyenkhoa']%>"></td>
+                                        <td><button type="submit" class="edit" style="color: orange;border: none;background: none;"><i class="fas fa-pen-square"></i></button></td>
+                                    </form>
+                                    <form action="/xoakhoa/<%=kq[i]['chuyenkhoa_id']%>" method="POST" id="formxoa">
+                                        <td><button type="submit" class="btnDelRow"><i class="fas fa-trash-alt"></i></button></td>
+                                    </form>
+                                </tr> <%}}%> </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+    <!-- Bootstrap core JavaScript-->
+    <script src="../../new/admin/js/sb-admin-2.min.js"></script>
+    <script src="../../handel/check.js"></script>
+    <script src="../../new/js/scriptBtn.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script>
+        $('#otherCheckbox').on('click', function () {
+            var cb = $('#otherCheckbox').is(':checked');
+            $('#other').prop('disabled', !cb);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,167 @@
+
+/*----------------------------------------*/
+/*  3.  Slider Area
+/*----------------------------------------*/
+.top-header-space-1 {
+    margin-top: 65px;
+}
+.top-header-space-2 {
+    margin-top: 150px;
+}
+.slider-area-1 {
+    padding-left: 50px;
+    padding-right: 50px;
+    position: relative;
+}
+.slider-area-2 {
+    position: relative;
+}
+.static-text {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+#slider-area-1 {
+    padding: 50px;
+    margin-top: 60px;
+    height: 45vw;
+    width: 100vw;
+    overflow: hidden;
+    float:left;
+}
+
+.nivo-caption {
+    background-color: transparent;
+    height: 100%;
+    opacity: 1;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    padding: 0;
+}
+.slide-text {
+    display: table;
+    height: 100%;
+}
+.middle-text {
+    display: table-cell;
+    vertical-align: middle;
+}
+.cap-title {
+    color: #157fda;
+    font-size: 120px;
+    font-weight: 700;
+    line-height: 100px;
+    margin: 0 0 7px;
+}
+.cap-sub-title {
+    color: #252525;
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0 0 17px;
+    text-transform: uppercase;
+}
+.cap-dec {
+    color: #252525;
+    padding: 0;
+    margin-bottom: 30px;
+}
+.cap-readmore {
+    background-color: #157fda;
+    border: 1px solid #157fda;
+    border-radius: 3px;
+    color: #fff;
+    display: inline-block;
+    font-weight: 600;
+    line-height: 24px;
+    padding: 7px 22px;
+    text-transform: uppercase;
+    -webkit-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+}
+.cap-readmore:hover {
+    background-color: transparent;
+    color: #157fda;
+}
+/* Nivo Control Nav */
+.nivo-controlNav {
+    margin-top: -45px;
+    position: absolute;
+    right: 17px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    z-index: 999;
+}
+.nivo-controlNav a {
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    display: block;
+    height: 16px;
+    position: relative;
+    text-indent: -99999px;
+    -webkit-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+    width: 16px;
+    margin: 2px 0;
+}
+.nivo-controlNav a:before {
+    background-color: #d7d2d5;
+    border-radius: 50%;
+    content: "";
+    height: 10px;
+    left: 2px;
+    position: absolute;
+    top: 2px;
+    -webkit-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+    width: 10px;
+}
+.nivo-controlNav a.active {
+    border-color: #157fda;
+}
+.nivo-controlNav a.active:before {
+    background-color: #157fda;
+}
+/* Nivo Direction Nav */
+.nivo-directionNav {}
+.nivo-directionNav a {
+    background-color: transparent;
+    border: 1px solid #157fda;
+    border-radius: 3px;
+    color: #157fda;
+    display: block;
+    height: 40px;
+    margin-top: -20px;
+    overflow: hidden;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    -webkit-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+    width: 40px;
+}
+.nivo-directionNav a i {
+    display: block;
+    font-size: 36px;
+    line-height: 40px;
+}
+.nivo-directionNav a:hover {
+    background-color: #157fda;
+    color: #fff;
+}
+.nivo-directionNav a.nivo-prevNav {
+    left: 30px;
+}
+.nivo-directionNav a.nivo-nextNav {
+    right: 30px;
+}
+/* Video & Static BG */
+.video-bg .cap-sub-title, .static-text.overlay .cap-sub-title {
+    color: #fff;
+}
+.video-bg .cap-dec, .static-text.overlay .cap-dec {
+    color: #fff;
+}

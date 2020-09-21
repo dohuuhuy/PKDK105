@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>SB Admin 2 - Dashboard</title>
+    <!-- Custom fonts for this template-->
+    <link href="../../new/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template-->
+    <link rel="stylesheet" href="../../new/admin/css/sb-admin-2.min.css">
+    <link rel="stylesheet" href="../../new/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../new/css/style.css">
+    <link rel="stylesheet" href="../../new/css/custom2.css">
+    <link rel="stylesheet" href="../../new/css/styleBtn.css">
+    <link rel="stylesheet" href="../../new/css/inputStyle.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="../../new/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="../../style.css">
+    <script>
+            //THONG BAO
+            jQuery(document).ready(function ($) {
+              //open popup
+              
+              //close popup
+              $('.cd-popup').on('click', function (event) {
+                if ($(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup')) {
+                  event.preventDefault();
+                  $(this).removeClass('is-visible');
+                }
+              });
+              //close popup when clicking the esc keyboard button
+              $(document).keyup(function (event) {
+                if (event.which == '27') {
+                  $('.cd-popup').removeClass('is-visible');
+                }
+              });
+            });
+          </script>
+</head>
+
+<body id="page-top">
+        <div ng-controller="DemoCtrl as vm" layout="column" ng-cloak="" ng-app="app">
+    <!-- Page Wrapper -->
+    <div id="wrapper"> <% include ../element/header_admin.ejs %>
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content" style="flex: 0">
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <span style=" text-align: center; color:#007EA7; font-weight: bold ; font-size: 20px;">QUẢN LÝ DỊCH
+                        VỤ</span>
+                </nav>
+            </div>
+            <div class="container-fuild">
+                <div class="col-12">
+                    <input type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl"ripple="ripple" value="Thêm">
+                </div>
+                <div class="col-12">
+                    <div class="customTable">
+                        <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" style="overflow: scroll;"> 
+                            <div  class="modal-dialog modal-xl">
+                                <!-- Modal content-->
+                                <form action="/themdichvu" id="themdichvu" method="POST">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close buttonClose"
+                                                data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h2 class="titleModal">Thêm dịch vụ</h2>
+                                            <div class="text-input">
+                                                <input id="tendv" type="text" name="tendv" placeholder="Tên dịch vụ"
+                                                    autocomplete="off" required />
+                                                <label for="tendv">Tên dịch vụ</label>
+                                            </div>
+                                            <div class="text-input" style="height: auto;">
+                                                <p class="titleMota">Mô tả:</p>
+                                                <md-content class="box-content">
+                                                        <md-input-container class="md-block">
+                                                            <textarea ck-editor ng-model="vm.content"
+                                                                md-select-on-focus=""
+                                                                id="content"></textarea>
+                                                        </md-input-container>
+                                                        <md-input-container class="md-block">
+                                                            <input ng-model="vm.content" type="text"
+                                                                name="mota" id="mota"
+                                                                style="opacity:0; " />
+                                                        </md-input-container>
+                                                    </md-content>
+                                            </div>
+                                            <input type="button" onclick="luudichvu();"
+                                                class="btn btn--contained-link ripple" ripple="ripple"
+                                                style="width: 100%;" value="Lưu">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                        <table class="table table-image" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">STT</th>
+                                    <th scope="col">Chuyên khoa</th>
+                                    <th scope="col">Mô tả</th>
+                                    <th scope="col"> Sửa</th>
+                                    <th scope="col">Xóa</th>
+                                </tr>
+                            </thead>
+                            
+                                    <tbody> <% if(kq!=""){%>
+                                       <input type="hidden" id="getid" value="<%=kq.length%>">
+                                     
+                                                   
+                                        <%for(var i =0 ; i< kq.length; i++){%> 
+                                           
+                                            <tr
+                                            class="box-object">
+                                            <td class="stt"><%=i+1%></td>
+                                            <td class="chuyenkhoa"><%=kq[i]['tendichvu']%></td>
+                                            <input type="hidden" value="<%=kq[i]['motadichvu']%>" id="motaan<%=i%>">
+                                            <td class="mota" id="motahien<%=i%>"></td>
+                                            <td class="edit"><a href="" data-toggle="modal"
+                                                    data-target="#myModal<%=i%>"><i class="fas fa-pen-square"></i></a>
+                                            </td>
+                                            <form action="/xoadichvu/<%=kq[i]['dichvu_id']%>" method="POST"
+                                                id="formxoa">
+                                                <td><button type="submit" class="btnDelRow"><i
+                                                            class="fas fa-trash-alt"></i></button></td>
+                                            </form>
+                                        </tr>
+                                        <div class="modal fade modalCustom" id="myModal<%=i%>" role="dialog"  style="overflow: scroll;">
+                                            <div class="modal-dialog modal-xl">
+                                                <!-- Modal content-->
+                                                <form action="/dieuchinhdichvu/<%=kq[i]['dichvu_id']%>"
+                                                    id="formdieuchinhdichvu" method="POST">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header"> <%=kq[i]['dichvu_id']%> <button
+                                                                type="button" class="close buttonClose"
+                                                                data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <h2 class="titleModal">Điều chỉnh dịch vụ</h2>
+                                                            <div class="text-input">
+                                                                <input type="text" value="<%=kq[i]['tendichvu']%>"
+                                                                    id="tendv1<%=i%>" name="tendv1" autocomplete="off"
+                                                                    required />
+                                                                <label for="tendv">Tên dịch vụ</label>
+                                                            </div>
+                                                            <br>
+                                                            <p class="titleMota">Mô tả:</p>
+
+                                                            <!--FORM GIOI THIEU-->
+                                                            <md-content class="box-content">
+                                                                    <md-input-container class="md-block">
+                                                                        <textarea ck-editor ng-model="vm.content<%=i%>"
+                                                                            md-select-on-focus=""
+                                                                            id="content<%=i%>"><%=kq[i]['motadichvu']%></textarea>
+                                                                    </md-input-container>
+                                                                    <md-input-container class="md-block">
+                                                                        <input ng-model="vm.content<%=i%>" type="text"
+                                                                            name="mota1" id="mota1<%=i%>"
+                                                                            style="opacity:0; " />
+                                                                    </md-input-container>
+                                                                </md-content>
+                                                            <input type="submit"
+                                                                class="btn btn--contained-primary ripple"
+                                                                ripple="ripple" style="width: 100%; margin-top: 25px;"
+                                                                value="Lưu">
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div> <%}%>
+                                    
+                                    
+                             
+                                        <%}%>
+                              
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  <!-- popup alert-->
+  <div class="cd-popup" role="alert">
+        <div class="cd-popup-container">
+          <p id="thongbao" style="color:red;"></p>
+          <!--<ul class="cd-buttons">
+                  <li><a href="#0">Yes</a></li>
+                  <li><a href="#0">No</a></li>
+                </ul> -->
+          <a href="#0" class="cd-popup-close img-replace">Close</a>
+        </div> <!-- cd-popup-container -->
+      </div> <!-- cd-popup -->
+
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js'></script>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.5.6/angular-sanitize.min.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.js'></script>
+    <script src='https://cdn.ckeditor.com/4.7.0/full/ckeditor.js'></script>
+    <script src="../script.js"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="../../new/admin/vendor/jquery/jquery.min.js"></script>
+    <script src="../../new/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../new/admin/js/sb-admin-2.min.js"></script>
+    <script src="../../handel/check.js"></script>
+    <script src="../../new/js/scriptBtn.js"></script>
+    <!-- Core plugin JavaScript-->
+
+
+   
+    <script>
+			$(document).ready(function () {
+              
+				id=$("#getid").val();
+				for(var i=0;i<id;i++ )
+				{
+					var motaan= '#motaan'+i;
+					var motahien='#motahien'+i
+					$(motahien).html($(motaan).val());
+				}
+			
+			});
+		</script>
+</body>
+
+</html>

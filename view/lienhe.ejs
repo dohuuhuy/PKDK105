@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Contact</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="Health medical template project">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+	<link rel="stylesheet" type="text/css" href="../new/styles/contact.css">
+	<link rel="stylesheet" type="text/css" href="../new/styles/contact_responsive.css">
+
+	<link rel="shortcut icon" type="image/x-icon" href="../new/images/logo.jpg">
+	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="new/styles/menu.css">
+	<link rel="stylesheet" type="text/css" href="new/styles/bootstrap4/bootstrap.min.css">
+	<link href="new/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--CSS Slide-->
+	<link rel="stylesheet" type="text/css" href="new/plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+	<link rel="stylesheet" type="text/css" href="new/plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+	<link rel="stylesheet" type="text/css" href="new/plugins/OwlCarousel2-2.2.1/animate.css">
+	<!--CSS Custom-->
+	<link rel="stylesheet" type="text/css" href="new/styles/main_styles.css">
+	<link rel="stylesheet" type="text/css" href="new/styles/responsive.css">
+	<link rel="stylesheet" type="text/css" href="new/css/custom.css">
+	<link rel="stylesheet" type="text/css" href="new/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="new/slide/import.css">
+	<!--CSS Banner-->
+	<link rel="stylesheet" type="text/css" href="new/slide/import.css">
+	<link rel="stylesheet" type="text/css" href="new/slide/style.css">
+	<link rel="stylesheet" type="text/css" href="new/slide/responsive.css">
+	<script>
+		$(document).ready(function () {
+			$("#lh").addClass("active");
+		})
+	</script>
+</head>
+
+<body> 
+	<% include element/header_user.ejs %> 
+	<div class="super_container">
+		<!-- Menu -->
+		<!-- Home -->
+		<div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="images/contact.jpg" data-speed="0.8"></div>
+		<div class="home" style="margin-top: 200px;">
+			<!-- Header -->
+			<!-- Contact -->
+			<div class="contact">
+				<div class="container">
+					<div class="row">
+						<!-- Contact form -->
+						<div class="col-lg-12 contact_col">
+							<div class="contact_form">
+								<div class="contact_title">Gửi liên hệ</div>
+								<div class="contact_form_container">
+									<form role="form" action="/send-mail" method="post" id="contact_form" class="contact_form">
+										<input type="text" id="contact_input" name="contact_input" class="contact_input" placeholder="Họ và tên" required="required">
+										<input type="email" id="contact_email" name="contact_email" class="contact_input" placeholder="Email liên hệ" required="required">
+										<input type="text" id="subject" name="subject" class="contact_input" placeholder="Tiêu đề" required="required">
+										<input class="contact_input contact_textarea" id="message" name="message" placeholder="Nội dung" required="required">
+										<button class="contact_button" id="contact_button" type="submit">send message</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Google Map -->
+			
+			<!-- Footer -->
+		</div> 
+		<div class="container-fluid">
+		<iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d1959.127355658125!2d106.64821150819466!3d10.868221432165509!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1zMTA1LzRhIEzDqiBWxINuIEtoxrDGoW5nLCBRdeG6rW4gMTIsIEjhu5MgQ2jDrSBNaW5o!5e0!3m2!1svi!2s!4v1574827531337!5m2!1svi!2s" width="100%" height="600" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+	</div>
+		<%include element/footer.ejs%>
+		<script src="../new/js/custom.js"></script>
+</body>
+
+</html>

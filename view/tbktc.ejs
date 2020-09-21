@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Login</title>
+  <!-- custom-theme -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="keywords" content="Admin Login" />
+
+  <!-- //custom-theme  -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- font-awesome icons -->
+  <script src="../socket.io/socket.io.js"></script>
+
+  <link rel="stylesheet" href="../style.css">
+  <script>
+    //THONG BAO
+    jQuery(document).ready(function ($) {
+      //open popup
+      document.getElementById("thongbao").innerHTML = "Đăng ký lịch khám thất bại!";
+      $('.cd-popup').addClass('is-visible');
+      //close popup
+      $('.cd-popup').on('click', function (event) {
+        window.location.replace("/bookhing");
+      });
+      //close popup when clicking the esc keyboard button
+      $(document).keyup(function (event) {
+        if (event.which == '27') {
+          $('.cd-popup').removeClass('is-visible');
+        }
+      });
+    });
+  </script>
+</head>
+
+<body>
+
+  <!-- popup alert-->
+  <div class="cd-popup" role="alert">
+    <div class="cd-popup-container">
+      <p id="thongbao" style="color:red;"></p>
+      <ul class="cd-buttons">
+        <li style="float: right;"><a href="/bookhing">Yes</a></li>
+        <!-- <li><a href="#0">No</a></li>-->
+      </ul>
+      <a href="#0" class="cd-popup-close img-replace">Close</a>
+    </div> <!-- cd-popup-container -->
+  </div> <!-- cd-popup -->
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+/** Input styling **/
+.text-input {
+    position: relative;
+    display: block;
+    height: 56px;
+    width: 100%;
+    margin-bottom:16px;
+  }
+  .text-input > input {
+    position: absolute;
+    bottom: 0;
+    display: block;
+    height: 40px;
+    width: 100%;
+    line-height: 40px;
+    border: 0;
+    border-bottom: 1px solid #9e9e9e;
+    outline: 0;
+    padding: 0 8px;
+    /*   transition: all 1s ease-in-out; */
+  }
+  .text-input > input::placeholder {
+    color: transparent;
+  }
+  .text-input > label {
+    position: absolute;
+    bottom: 12px;
+    left: 9px;
+    color: #9e9e9e;
+    cursor: text;
+    transition: all 0.2s ease-in-out;
+  }
+  .text-input > input:focus,
+  .text-input > input:not(:placeholder-shown) {
+    border-bottom: 2px solid #007EA7;
+  }
+  .text-input > input:focus + label,
+  .text-input > input:not(:placeholder-shown) + label {
+    bottom: 40px;
+    left: 0;
+    font-size: 14px;
+    color: #007EA7;
+  }

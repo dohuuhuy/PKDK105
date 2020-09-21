@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Untitled Document</title>
+</head>
+<link rel="shortcut icon" href="images/fevicon.ico.png" type="image/x-icon" />
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<link rel="stylesheet" type="text/css" href="../new/styles/menu.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="../new/css/custom.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../new/styles/bootstrap4/bootstrap.min.css">
+<link href="../new/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="../new/plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+<link rel="stylesheet" type="text/css" href="../new/plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+<link rel="stylesheet" type="text/css" href="../new/plugins/OwlCarousel2-2.2.1/animate.css">
+<link rel="stylesheet" type="text/css" href="../new/styles/main_styles.css">
+<link rel="stylesheet" type="text/css" href="../new/styles/responsive.css">
+<link rel="stylesheet" href="../new/css/bootstrap.min.css">
+
+
+
+<script>
+        $(document).ready(function () {
+            $("#td").addClass("active");
+        })
+    </script>
+<body>
+    <% include element/header_user.ejs %>
+    <div class="container">
+        <div class="row" style="margin-top: 250px">
+            <%for(var j =1;j<=dem;j++)
+                {%>
+            <div class="col-md-12"
+                style="box-shadow: 0 0 20px rgba(0,0,0,.15); margin: 16px; padding: 16px; border-radius: 20px;">
+                <div class="col-md-4">
+                    <table class="table-fill">
+                        <thead>
+                            <tr>
+                                <th class="text-left" style="text-align: center;">Vị trí</th>
+                                <th class="text-left" style="width: 30%;text-align: center;">Số lượng</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-hover">
+                            <% for(var i=0; i < vitri.length;i++) { %>
+                            <% if(vitri[i]['nhomvitri_id']===j){ %>
+                            <tr>
+                                <td class="text-left"><%=vitri[i]['tenvitri']%></td>
+                                <td class="text-left" style="text-align: center;"><%=vitri[i]['soluong']%></td>
+                            </tr>
+                            <% } %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                    <!---->
+                </div>
+                <div class="col-md-8">
+                    <div class="col-md-6">
+                        <div class="wpb_wrapper">
+                            <div class="wpb_text_column wpb_content_element ">
+                                <div class="wpb_wrapper">
+                                    <p class="box_header animation-slide page_margin_top slide"><span
+                                            style="color: #808080; border-bottom: 3px solid #007EA7">YÊU CẦU</span></p>
+                                </div>
+                            </div>
+                            <div
+                                class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_10 vc_sep_border_width_2 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_turquoise vc_custom_1465470347785  vc_custom_1465470347785">
+                                <span class="vc_sep_holder vc_sep_holder_l"><span
+                                        class="vc_sep_line"></span></span><span
+                                    class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span></div>
+                            <div class="wpb_text_column wpb_content_element ">
+                                <div class="wpb_wrapper">
+                                    <%
+                                    for(var y=0;y< yeucau.length;y++)
+                                    {
+                                        if(yeucau[y]['nhomvitri_id']===j)
+                                        {
+                                            %>
+                                    <p><span style="color: #808080;">→&nbsp; <%=yeucau[y]['tenyeucau']%></span></p>
+                                    <%
+                                        }
+                                    }
+                                    %>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="wpb_wrapper">
+                            <div class="wpb_text_column wpb_content_element ">
+                                <div class="wpb_wrapper">
+                                    <p><span style="color: #808080; border-bottom: 3px solid #007EA7">HỒ SƠ DỰ
+                                            TUYỂN</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div
+                                class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_20 vc_sep_border_width_2 vc_sep_pos_align_left vc_separator_no_text vc_sep_color_turquoise vc_custom_1465470377268  vc_custom_1465470377268">
+                                <span class="vc_sep_holder vc_sep_holder_l"><span
+                                        class="vc_sep_line"></span></span><span
+                                    class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span></div>
+                            <div class="wpb_text_column wpb_content_element ">
+                                <div class="wpb_wrapper">
+                                        <%
+                                    for(var o=0;o< hoso.length;o++)
+                                    {
+                                        if(hoso[o]['nhomvitri_id']===j)
+                                        {
+                                            %>
+                                        <p><span style="color: #808080;">≡&nbsp;<%=hoso[o]['tenhoso']%></span></p>
+                                        <%
+                                    }
+                                }
+                                %>
+                                  
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <%
+        } %>
+        </div>
+
+    </div>
+    <% include element/footer.ejs %>
+    <style>
+        .a:hover {
+            width: 1000px;
+        }
+    </style>
+
+    <script src="../new/js/bootstrap.min.js"></script>
+    <script src="../new/js/slick.min.js"></script>
+    <script src="../new/js/jquery.newsTicker.min.js"></script>
+    <script src="../new/js/customs.js"></script>
+    <script src="../new/js/custom.js"></script>
+
+
+</body>
+
+</html>

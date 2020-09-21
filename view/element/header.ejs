@@ -1,0 +1,54 @@
+
+<div class="header-top wow fadeIn">
+  <div class="container"> <a class="navbar-brand" href="index.php"><img src="images/logo.png" alt="image"></a>
+    <div class="right-header">
+      <div class="header-info">
+        <div class="info-inner"> <span class="icontop"><img src="images/phone-icon.png" alt="#"></span> <span class="iconcont"><a href="tel:0583538872"> 0583538872</a></span> </div>
+        <div class="info-inner"><span class="icontop"><em class="fa fa-envelope" aria-hidden="true"></em></span> <span class="iconcont"><a data-scroll="data-scroll" href="mailto:info@yoursite.com">phongkhamdakhoa105@gmail.com</a></span></div>
+        <div class="info-inner"> <span class="icontop"><i class="fa fa-clock-o" aria-hidden="true"></i></span> <span class="iconcont"><a data-scroll href="#">Làm việc: 7:00am - 8:00pm</a></span> </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="header-bottom wow" id="navbarMain">
+  <div class="container"  style="width: 85%;">
+    <nav class="main-menu">
+     
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li><a class="active" href="/">Trang Chủ</a></li>
+          <li><a data-scroll href="/gioithieu">Giới Thiệu</a></li>
+          <li><a data-scroll href="/quytrinh">Quy trình</a></li>
+          <li><a data-scroll href="/chuyenkhoa">Chuyên khoa</a>
+          <ul id="menuck">
+            <%for(var i =0; i < menu.length; i ++ )
+            {
+                %>
+            <a href="/chuyenkhoa/<%=menu[i]['chuyenkhoa_id']%>"><li><%=menu[i]['tenchuyenkhoa']%></li></a>
+            <%
+          }%>
+          </ul>
+          </li>
+             <li><a  href="/tintuc">Tin tức</a>
+            <ul>
+              <a href="/tintuc/1"><li>Tin phòng khám</li></a>
+              <a href="/tintuc/2"><li>Tin y tế</li></a>
+            </ul>
+            </li>
+             <li><a href="/tuyendung">Tuyển dụng</a></li>
+          <li><a data-scroll href="/bacsi">Bác Sĩ</a></li>
+          <li><a data-scroll href="/lienhe">Liên Hệ</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="serch-bar">
+      <div id="custom-search-input">
+        <div class="input-group col-md-12">
+          <input type="text" class="form-control input-lg" placeholder="Tìm kiếm" />
+          <span class="input-group-btn">
+          <button class="btn btn-info btn-lg" type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+          </span> </div>
+      </div>
+    </div>
+  </div>
+</div>

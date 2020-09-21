@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>SB Admin 2 - Dashboard</title>
+  <!-- Custom styles for this template-->
+  <link rel='stylesheet' href='https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.css'>
+  <link href="../../new/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="../../new/admin/css/sb-admin-2.min.css">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../newstyle.css">
+  <link rel="stylesheet" href="../../new/css/custom2.css">
+  <link rel="stylesheet" href="../../new/css/styleBtn.css">
+  <link rel="stylesheet" href="../../new/css/inputStyle.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="../../socket.io/socket.io.js"></script>
+  <script>
+    var socket = io("http://103.81.86.79:8080");
+    // HANDEL GIOI THIEU PHONG KHÁM
+    function modelhinhgt() {
+      var selector = document.getElementById("themhinhgt");
+      var img = document.getElementById("showmodelgt");
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var loai = selector.files[0].type;
+        if (loai == "image/jpeg" || loai == "image/png") {
+          img.src = e.target.result;
+          document.getElementById("loigt").innerHTML = ""
+          $("#chenhinhgt").click(function () {
+            var tenhinh = selector.files[0].name;
+            var tenluu = Date.now() + '-' + tenhinh;
+            socket.emit("themhinhtt", { base64: e.target.result }, tenluu);
+            // var fil = document.getElementById("themhinh").value;
+            //  var filename = fil.replace(/^.*?([^\\\/]*)$/, '$1')
+            setTimeout(function () {
+              var editor = CKEDITOR.instances.content3;
+              var link = '../../hinhanh/baiviet/';
+              var value = '<p><img width="70%" height="70%"  class="img-fluid" src="' + link + tenluu + '"/></p>'
+              if (editor.mode == 'wysiwyg') {
+                var imgHtml = CKEDITOR.dom.element.createFromHtml(value);
+                editor.insertElement(imgHtml);
+                //Event for load image in edit text
+                $('#myModal3').modal('hide');
+                $('#themhinhtt').val('');
+                $("#showmodelgt").attr("src", "");
+                $('.modal-backdrop').remove();
+              } else {
+                alert('You must be in WYSIWYG mode!');
+              }
+            }, 400);
+          })
+        }
+        else {
+          document.getElementById("loigt").innerHTML = "Bạn vui lòng chọn file ảnh"
+        }
+      }
+      reader.readAsDataURL(selector.files[0]);
+    }
+    //model - anh null
+    $(document).ready(function () {
+      $("#menuDCT").addClass("active");
+      $("#chenhinhgt").click(function () {
+        var tenhinh = $("#themhinhgt").val();
+        if (tenhinh == "") {
+          document.getElementById("loigt").innerHTML = "Mời bạn chọn ảnh"
+        }
+      })
+    })
+    function anhdaidiengt() {
+      var avt = document.getElementById("avtgt");
+      var showavt = document.getElementById("showanhdaidiengt");
+      var loai = avt.files[0].type;
+
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        if (loai == "image/jpeg" || loai == "image/png") {
+          showavt.src = e.target.result;
+        }
+        else {
+          document.getElementById("thongbao").innerHTML = "Bạn vui lòng chọn file ảnh";
+          $('.cd-popup').addClass('is-visible');
+        }
+      }
+      reader.readAsDataURL(avt.files[0]);
+    }
+
+  </script>
+  <script>
+    //THONG BAO
+    jQuery(document).ready(function ($) {
+      //open popup
+
+      //close popup
+      $('.cd-popup').on('click', function (event) {
+        if ($(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup')) {
+          event.preventDefault();
+          $(this).removeClass('is-visible');
+        }
+      });
+      //close popup when clicking the esc keyboard button
+      $(document).keyup(function (event) {
+        if (event.which == '27') {
+          $('.cd-popup').removeClass('is-visible');
+        }
+      });
+    });
+  </script>
+</head>
+
+<body id="page-top">
+  <!-- Page Wrapper -->
+  <div id="wrapper"> <% include ../element/header_admin.ejs %>
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <!-- Main Content -->
+      <div>
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+          <span style=" text-align: center; color:#007EA7; font-weight: bold ; font-size: 24px;">CẬP NHẬT THÔNG TIN GIỚI THIỆU PHÒNG KHÁM</span>
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+        </nav>
+      </div>
+      <div class="container-fluid form-style-1">
+        <div ng-controller="DemoCtrl as vm" layout="column" ng-cloak="" ng-app="app">
+          <md-content class="box-content">
+            <!--FORM GIOI THIEU-->
+            <div id="gioithieu" style="padding: 20px; ">
+              <form method="post" action="/gioithieu" id="formgioithieu" enctype="multipart/form-data">
+                <div id="wp-content-media-buttons" class="wp-media-buttons">
+                  <button type="button" class="btn btn--contained-success ripple" ripple="ripple" data-toggle="modal" data-target="#myModal3">Thêm Media<div class="ripple__ink"></div>
+                    <div class="ripple__ink"></div>
+                  </button>
+                  <label id="error_customerName">
+                    <!-- The Modal -->
+                    <div class="modal modalCustom" id="myModal3">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <!-- Modal Header -->
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          </div>
+                          <!-- Modal body -->
+                          <div class="modal-body">
+                            <h2 class="titleModal">Thêm hình vào bài viết</h2>
+                            <input type="file" id="themhinhgt" name="themhinhgt" onchange="modelhinhgt();">
+                            <img src="" id="showmodelgt" width="40%" height="40%">
+                          </div>
+                          <!-- Modal footer -->
+                          <p id="loigt" style="text-transform: inherit;font-style: italic;color: red;font-size: 13px;font-weight: 400;"></p>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn--contained-info ripple" ripple="ripple" name="chenhinhgt" id="chenhinhgt">Xác nhận<div class="ripple__ink"></div></button>
+                            <button type="submit" class="btn btn--contained-default ripple" ripple="ripple" name="closemodal" id="closemodal" data-dismiss="modal" onclick="document.getElementById('themhinhgt').value=''; document.getElementById('showmodelgt').src='' ">Hủy<div class="ripple__ink"></div></button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <md-input-container class="md-block">
+                  <textarea ck-editor ng-model="vm.content3" md-select-on-focus="" id="content3"><%=gioithieu[0]['noidung']%></textarea>
+                </md-input-container>
+                <md-input-container class="md-block">
+                  <input ng-model="vm.content3" type="text" name="noidunggt" id="noidunggt" style="opacity: 0;" />
+                </md-input-container>
+                <div class="row" style="padding:16px; background: #c9e0ff;">
+                  <div class="upload-btn-wrapper col-md-4">
+                    <div class="row">
+                      <button class="btn btn--contained-dark ripple" ripple="ripple">Ảnh đại diên<div class="ripple__ink"></div></button>
+                      <input type="file" name="avtgt" id="avtgt" onchange="anhdaidiengt();">
+                    </div>
+                    <div class="row">
+                      <img id="showanhdaidiengt" width="50%" height="50%" src="">
+                    </div>
+                  </div>
+                  <div class="col-md-8" style="padding-left: 0px;">
+                    <span id="label"> Video đại diện</span> <input type="text" name="videogt" id="videogt" value="<%=gioithieu[0]['video']%>">
+                    <button class="btn btn--contained-link ripple cd-popup-trigger" id="capnhatgt" onclick="capnhatgioithieu();" ripple="ripple">Cập nhật giới thiệu<div class="ripple__ink"></div>
+                      <div class="ripple__ink"></div>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </md-content>
+          <!-- popup alert-->
+          <div class="cd-popup" role="alert">
+            <div class="cd-popup-container">
+              <p id="thongbao" style="color:red;"></p>
+              <!--<ul class="cd-buttons">
+                  <li><a href="#0">Yes</a></li>
+                  <li><a href="#0">No</a></li>
+                </ul> -->
+              <a href="#0" class="cd-popup-close img-replace">Close</a>
+            </div> <!-- cd-popup-container -->
+          </div> <!-- cd-popup -->
+        </div>
+      </div>
+      <!-- End of Footer -->
+    </div>
+    <!-- End of Content Wrapper -->
+  </div>
+  <!-- End of Page Wrapper -->
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+  <!-- Logout Modal-->
+  <div class="modal modalCustom fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" href="login.html">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Bootstrap core JavaScript-->
+  <script src="new/admin/vendor/jquery/jquery.min.js"></script>
+  <script src="new/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="new/admin/js/sb-admin-2.min.js"></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js'></script>
+  <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/svg-assets-cache.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.5.6/angular-sanitize.min.js'></script>
+  <script src='https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc4/angular-material.min.js'></script>
+  <script src='https://cdn.ckeditor.com/4.7.0/full/ckeditor.js'></script>
+  <script src="handel/check.js"></script>
+  <script>
+  </script>
+  <script src="script.js"></script>
+  <!-- Core plugin JavaScript-->
+</body>
+
+</html>

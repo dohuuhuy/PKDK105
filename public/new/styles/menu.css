@@ -1,0 +1,40 @@
+.bg-custom-2 {
+    background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
+}
+
+#mndrop a {
+    text-decoration: none;
+    color: #5f7d95;
+}
+
+#mndrop a:hover {
+    background: #00A896;
+    color: #ffffff;
+}
+
+.dropdown>.dropdown-menu {
+    top: 200%;
+    transition: 0.3s all ease-in-out;
+}
+
+.dropdown:hover>.dropdown-menu {
+    border: none;
+    display: block;
+    top: 100%;
+}
+.dropdown>.dropdown-toggle:active {
+    /*Without this, clicking will make it sticky*/
+    pointer-events: none;
+}
+.header_nav_content
+{
+    padding-left: 3% ;
+}
+.search_content
+{
+    padding-right: 3% ;
+}
+body
+{
+    background-color: #8f9cb5;
+}

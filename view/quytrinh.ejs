@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Phòng khám Đa Khoa 105 - Nơi chăm sóc bệnh nhân uy tín tại Sài Gòn" />
+    <title>Phòng khám Đa Khoa 105 - Nơi chăm sóc bệnh nhân uy tín tại Sài Gòn</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../new/images/logo.jpg">
+    <link rel="stylesheet" type="text/css" href="../new/styles/menu.css">
+    <link rel="stylesheet" type="text/css" href="../new/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="../new/css/qt_ck.css">
+    <script src="../assets/js/jquery.min.js"></script>
+    <!-- Modernizer for Portfolio -->
+    <link rel="stylesheet" type="text/css" href="../new/styles/bootstrap4/bootstrap.min.css">
+    <link href="../new/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="../new/plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+    <link rel="stylesheet" type="text/css" href="../new/plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+    <link rel="stylesheet" type="text/css" href="../new/plugins/OwlCarousel2-2.2.1/animate.css">
+    <link rel="stylesheet" type="text/css" href="../new/styles/main_styles.css">
+    <link rel="stylesheet" type="text/css" href="../new/styles/responsive.css">
+    <link rel="stylesheet" href="../new/css/custom.css">
+    <link rel="stylesheet" href="../new/css/bootstrap.min.css">
+		<script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+    <style>
+        .header_nav_container {
+            margin: 0px;
+        }
+    </style>
+</head>
+
+<body style="background: #ececec;"> <% include element/header_user.ejs %> <div class="container"
+        style="padding-top: 200px;">
+        <input type="hidden" id="id" value="<%=so%>" >
+        <section id="contentSection">
+            <div class="row">
+                
+                <div class="col-lg-8 col-md-8 col-sm-8">
+                    <div class="left_content">
+                        <div class="single_page">
+                            <div class="single_page_content">
+                                <input type="hidden" id="content" value="
+                                <% if(quytrinh!='')
+                                {
+                                    %>
+                                    <%=quytrinh[0]['noidung']%>
+                                    <%
+                                } %>" />
+                                <div id="noidung">
+                                </div>
+                            </div>
+                            <div class="related_post" style="padding-top: 100px;">
+                                <h2>Bài viết mới<i class="fa fa-thumbs-o-up"></i></h2>
+                                <ul class="spost_nav wow fadeInDown animated">
+                                    <% if(tintuc!="")
+                                    {
+                                        for( var i= 0 ; i < tintuc.length-1; i++)
+                                        {
+                                            %>
+                                            <li>
+                                                    <div class="media"> <a class="media-left" href="/noidung/<%=tintuc[i]['tintuc_id']%>"> <img
+                                                                src="../hinhanh/baiviet/<%=tintuc[i]['hinhanh']%>" alt=""> </a>
+                                                        <div class="media-body"> <a class="catg_title" href="/noidung/<%=tintuc[i]['tintuc_id']%>">
+                                                                <%=tintuc[i]['tieude']%></a> </div>
+                                                    </div>
+                                                </li>
+                                            <%
+                                        }
+                                    } %>
+                                   
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <h4 style="background: linear-gradient(to right, #367bff 0%, #28bdf8 100%); border-radius: 16px; padding: 15px; font-weight: bold; color: white; box-shadow: 0 9px 37px -8px rgba(40, 189, 248, 2.4);">
+                        Tin khác</h4>
+                    <aside class="right_content">
+                        <div class="latest_post">
+                            <div class="latest_post_container">
+                                <ul class="latest_postnav"> 
+                                
+                                    <%for(var i =0; i < random.length; i ++ ){ %> <li>
+                                        <div class="media">
+                                            <a href="/noidung/<%=random[i]['tintuc_id']%>" class="media-left">
+                                                <img alt="" src="../hinhanh/baiviet/<%=random[i]['hinhanh']%>">
+                                            </a>
+                                            <div class="media-body">
+                                                <a href="/noidung/<%=random[i]['tintuc_id']%>"
+                                                    class="catg_title"><%=random[i]['tieude']%></a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <% }%>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="single_sidebar">
+                            <div class="tab-content">
+                                <div>
+                                    <div class="vide_area">
+                                        <% 
+                                        if(video!="")
+                                        {
+                                            
+                                            for(var i=0; i< video.length; i++)
+                                            {
+                                                %>
+                                                <input type="hidden" id="video" value="<%=video[i]['video']%>">
+                                                <p id="showvideo"></p>
+                                                <%
+                                            }
+                                        } %>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </section>
+    </div> <%include element/footer.ejs%>
+    <script>
+        $(document).ready(function () {
+            $("#noidung").html($("#content").val());
+        });
+    </script>
+    <script src="../new/styles/bootstrap4/popper.js"></script>
+    <script src="../new/styles/bootstrap4/bootstrap.min.js"></script>
+    <script src="../new/plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+    <script src="../new/plugins/easing/easing.js"></script>
+    <script src="../new/plugins/parallax-js-master/parallax.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js'></script>
+    <script src="../new/js/custom.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#showvideo").html($("#video").val());
+        });
+    </script>
+        <script>
+                $(document).ready(function()
+                {
+                    if($("#id").val()==1)
+                    {
+                        $("#vct").addClass("active");
+                        
+                    }
+                    else
+                    {
+                        $("#ck").addClass("active");
+                    }
+                    
+                })
+            </script>
+</body>
+
+</html>

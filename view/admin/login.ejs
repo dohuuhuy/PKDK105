@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Login</title>
+  <!-- custom-theme -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="keywords" content="Admin Login" />
+  <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+        function hideURLbar(){ window.scrollTo(0,1); } </script>
+  <!-- //custom-theme  -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- font-awesome icons -->
+  <link href="../../new/css/font-awesome.css" rel="stylesheet">
+  <!-- //font-awesome icons -->
+  <link href="//fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+  <script>
+    //THONG BAO
+    jQuery(document).ready(function ($) {
+      //open popup
+
+      //close popup
+      $('.cd-popup').on('click', function (event) {
+        if ($(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup')) {
+          event.preventDefault();
+          $(this).removeClass('is-visible');
+        }
+      });
+      //close popup when clicking the esc keyboard button
+      $(document).keyup(function (event) {
+        if (event.which == '27') {
+          $('.cd-popup').removeClass('is-visible');
+        }
+      });
+    });
+  </script>
+  <style>
+    body {
+      background: #0083B0;
+      background: -webkit-linear-gradient(to right, #00B4DB, #0083B0);
+      background: linear-gradient(to right, #00B4DB, #0083B0);
+      background-repeat: no-repeat;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-family: 'Ubuntu', sans-serif;
+      height: 100vh;
+      margin: -20px 0 50px;
+    }
+
+    #formdangnhap {
+      background-color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 0 50px;
+      height: 100%;
+      text-align: center;
+    }
+
+    .login-form {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+      overflow: hidden;
+      width: 400px;
+      max-width: 100%;
+      padding: 80px 0px 90px 0px;
+    }
+
+    .login-header {
+      width: 100%;
+      text-align: center;
+      font-weight: bold;
+      margin: 0;
+      color: black;
+      margin-bottom: 30px;
+    }
+
+    a {
+      color: #333;
+      font-size: 14px;
+      text-decoration: none;
+      margin: 15px 0;
+    }
+
+    input {
+      background-color: #eee;
+      border: none;
+      padding: 12px 15px;
+      margin: 8px 0;
+      outline: none;
+      width: 100%;
+    }
+
+    button {
+      border-radius: 20px;
+      border: 1px solid #0083B0;
+      background-color: #0083B0;
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 12px 45px;
+      letter-spacing: 1px;
+      outline: none;
+      text-transform: uppercase;
+      transition: transform 80ms ease-in;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    @media only screen and (max-width: 419px) {
+      .login-form {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-form w3_form">
+    <div class="login w3_login">
+      <div class="w3l_grid">
+        <form class="login-container" action="/dangnhap" id="formdangnhap" method="post">
+          <h2 class="login-header w3_header">Đăng nhập</h2>
+          <input name="tendn" id="tendn" type="text" placeholder="Tên đăng nhập" autocomplete="off" required />
+          <input name="pass" id="pass" type="password" placeholder="Mật khẩu" autocomplete="off" required />
+          <button onclick="dangnhap();" style="margin-top: 20px;">Đăng nhập</button>
+          <a href="/">Trở về trang chủ</a>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- popup alert-->
+  <div class="cd-popup" role="alert">
+    <div class="cd-popup-container">
+      <p id="thongbao" style="color:red;"></p>
+      <!--<ul class="cd-buttons">
+              <li><a href="#0">Yes</a></li>
+              <li><a href="#0">No</a></li>
+            </ul> -->
+      <a href="#0" class="cd-popup-close img-replace">Close</a>
+    </div> <!-- cd-popup-container -->
+  </div> <!-- cd-popup -->
+  <script src="../../handel/check.js"></script>
+</body>
+
+</html>

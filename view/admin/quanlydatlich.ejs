@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>SB Admin 2 - Dashboard</title>
+    <!-- Custom fonts for this template-->
+    <link href="../../new/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template-->
+    <link rel="stylesheet" href="../../new/admin/css/sb-admin-2.min.css">
+    <link rel="stylesheet" href="../../new/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../new/css/style.css">
+    <link rel="stylesheet" href="../../new/css/custom.css">
+    <link rel="stylesheet" href="../../new/css/custom2.css">
+    <link rel="stylesheet" href="../../new/css/styleBtn.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="../../new/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="../../style.css">
+    <script src="../../socket.io/socket.io.js"></script>
+    <script>
+        var socket = io("http://103.81.86.79:8080");
+        socket.on("refresh_booking_admin", function () {
+            window.location.href = "/admin/quanlylichkham";
+        })
+        var a = [];
+        $(document).ready(function () {
+            // $("#menuBV").addClass("active");
+            var checkboxes = $("input[type='checkbox']")
+
+            checkboxes.click(function () {
+                v = $(this).is(":checked");
+                if (v == true) {
+                    a.push($(this).val())
+                }
+                else {
+                    var index = a.indexOf($(this).val());
+                    if (index > -1) {
+                        a.splice(index, 1);
+                    }
+                }
+            });
+        });
+        $(document).ready(function () {
+            $("#xoa").click(function () {
+                document.getElementById("thongbao").innerHTML = "Xác nhận xóa!";
+                $('.cd-popup').addClass('is-visible');
+                $("#a").val(a);
+                $("#xacnhan").click(function () {
+
+                    $("#xoabooklich").submit();
+                })
+
+            })
+        })
+
+
+    </script>
+    <script>
+        //THONG BAO
+        jQuery(document).ready(function ($) {
+            //open popup
+
+            //close popup
+            $('.cd-popup').on('click', function (event) {
+                if ($(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup') || $(event.target).is('.no')) {
+                    event.preventDefault();
+                    $(this).removeClass('is-visible');
+                }
+            });
+            //close popup when clicking the esc keyboard button
+            $(document).keyup(function (event) {
+                if (event.which == '27') {
+                    $('.cd-popup').removeClass('is-visible');
+                }
+            });
+        });
+    </script>
+</head>
+
+<body id="page-top" style="min-width: 1000px;">
+    <div id="wrapper"> <% include ../element/header_admin.ejs %> <div id="content-wrapper" class="d-flex flex-column">
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+                style="display: block; padding-top: 20px;">
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <span style=" text-align: center; color:#4e73df; font-weight: bold ; font-size: 20px;">QUẢN LÝ LỊCH
+                    KHÁM</span>
+            </nav>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div style="position: unset;">
+                            <div class="customTable">
+                                <table class="table table-image" id="myTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Mã đặt</th>
+                                            <th scope="col">Họ tên</th>
+                                            <th scope="col">Địa chỉ</th>
+                                            <th scope="col" class="title">Email</th>
+                                            <th scope="col">Số điện thoại</th>
+                                            <th scope="col" class="title">Thời gian khám</th>
+                                            <th scope="col" class="title">Mô tả</th>
+                                            <th scope="col" class="title">Ngày đặt lịch</th>
+                                            <th scope="col" class="title">Tình trạng</th>
+                                            <form action="/xoabooklich" id="xoabooklich" method="POST">
+                                                <input type="hidden" value="" id="a" name="a">
+                                                <th scope="col"><input type="button" id="xoa" value="Xóa"></th>
+
+                                                <!-- popup alert-->
+                                                <div class="cd-popup" role="alert">
+                                                    <div class="cd-popup-container">
+                                                        <p id="thongbao" style="color:red;"></p>
+                                                        <ul class="cd-buttons">
+                                                            <li><a href="#0" id="xacnhan">Yes</a></li>
+                                                            <li><a class="no" href="#0">No</a></li>
+                                                        </ul>
+                                                        <a href="" class="cd-popup-close img-replace">Close</a>
+                                                    </div> <!-- cd-popup-container -->
+                                                </div> <!-- cd-popup -->
+                                            </form>
+                                            <th scope="col" class="title"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <form action="" method="POST">
+                                            <% if(kq!=""){%>
+                                            <%for(var i= 0; i< kq.length; i++){ %>
+                                            <% var d = new Date(kq[i]['ngaydat']); %>
+                                            <% d = new Date(d.getTime() - 3000000); %>
+                                            <% var date_format_str = d.getFullYear().toString()+"-"+((d.getMonth()+1).toString().length==2?(d.getMonth()+1).toString():"0"+(d.getMonth()+1).toString())+"-"+(d.getDate().toString().length==2?d.getDate().toString():"0"+d.getDate().toString())+" "+(d.getHours().toString().length==2?d.getHours().toString():"0"+d.getHours().toString())+":"+((parseInt(d.getMinutes()/5)*5).toString().length==2?(parseInt(d.getMinutes()/5)*5).toString():"0"+(parseInt(d.getMinutes()/5)*5).toString())+":00"; %>
+                                            <tr class="box-object">
+                                                <td class="stt"><%=kq[i]['booklich_id']%></td>
+                                                <td class="image"><%=kq[i]['hoten']%></td>
+                                                <td class="tieude"><%=kq[i]['diachi']%></td>
+                                                <td class="ngaydang"><%=kq[i]['email']%></td>
+                                                <td class="tenloai"><%=kq[i]['sdt']%></td>
+                                                <td class="tieude"><%=kq[i]['thoigiandat']%></td>
+                                                <td class="ngaydang"><%=kq[i]['mota']%></td>
+                                                <td class="tenloai"><%=date_format_str%></td>
+                                                <td class="tenloai">
+                                                    <%if(kq[i]['duyet']==0){%>
+                                                    Chưa duyệt
+                                                    <%}else{%>
+                                                    Đã duyệt
+                                                    <%} %>
+                                                </td>
+                                                <td class="del">
+                                                    <input type="checkbox" value="<%=kq[i]['booklich_id']%>"
+                                                        id="<%=kq[i]['booklich_id']%>">
+                                                    <label for="<%=kq[i]['booklich_id']%>"></label>
+                                                </td>
+                                                <%if(kq[i]['duyet']==0){%>
+                                                <td><button type="submit" name="id" class="btnDuyetRow"  rel="tooltip" title="Duyệt lịch khám" 
+                                                        value="<%=kq[i]['booklich_id']%>"><i class="fas fa-check"></i></button></td>
+                                                <%}else{%>
+                                                <td class="tenloai"></td>
+                                                <%} %>
+
+                                            </tr>
+                                            <%}}%>
+                                        </form>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="../../new/admin/js/sb-admin-2.min.js"></script>
+</body>
+
+</html>
